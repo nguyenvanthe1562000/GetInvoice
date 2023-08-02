@@ -13,6 +13,15 @@ using GmailAPI.APIHelper;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Gmail.v1;
+using Google.Apis.Gmail.v1.Data;
+using Google.Apis.Services;
+using System.Web;
 
 namespace GetInvoice.Gmail
 {
@@ -62,11 +71,16 @@ namespace GetInvoice.Gmail
         {
             try
             {
-                DataTable dtLastImport = utilities.ExeSQL($"select IdEmail from f_LogGmail group by IdEmail" );
-                
+                DataTable dtLastImport = utilities.ExeSQL($"select IdEmail, Domain " +
+                     $" from f_LogGmail" +
+                     $" where Domain = '{local_user.gmail}'" +
+                     $" group by IdEmail,Domain");
+
                 DataTable dtImport = new DataTable();
                 dtImport.TableName = "f_LogGmail";
                 dtLastImport.Columns.Add("IdEmail", typeof(string));
+                dtLastImport.Columns.Add("Domain", typeof(string));
+
 
                 GmailService GmailService = GmailAPIHelper.GetService();
                 List<GmailModel> EmailList = new List<GmailModel>();
@@ -79,8 +93,11 @@ namespace GetInvoice.Gmail
                 {
                     subjectQuery = $"subject:{item} AND";
                 }
+                DateTime sevenDaysAgo = DateTime.Now.AddDays(-1*(setupGmail.LoadMailTime>0? setupGmail.LoadMailTime:-7));
+                string formattedDate = sevenDaysAgo.ToString("yyyy/MM/dd");
+                subjectQuery += $"after:{formattedDate}";
 
-                    ListRequest.Q = subjectQuery;
+                ListRequest.Q = subjectQuery;
                 //GET ALL EMAILS
                 ListMessagesResponse ListResponse = ListRequest.Execute();
                 // Xóa các email đã được đánh dấu đã đọc và đc import vào Server
@@ -99,6 +116,7 @@ namespace GetInvoice.Gmail
 
                         DataRow dataRow = dtImport.NewRow();
                         dataRow[0] = Msg.Id;
+                        dataRow[1] = local_user.gmail;
                         dtImport.Rows.Add(dataRow);
                     
                         //MESSAGE MARKS AS READ AFTER READING MESSAGE

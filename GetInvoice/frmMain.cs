@@ -25,7 +25,7 @@ namespace GetInvoice
 {
     public partial class frmMain : Form
     {
-        private static UserInfo local_user;
+        public static UserInfo local_user;
         private string _DATABASE_STRING = "118.70.81.95,58386";
         private string USERNAME = "";
         private string FULLNAME = "";
@@ -36,15 +36,17 @@ namespace GetInvoice
         private string _DATABASE_NAME_DEST = "";
         private string _USERID_DEST = "";
         private string _PASSWORD_DEST = "";
+        bool _checkTaskMailMess = false;
+        private readonly FileLogger _logger;  
         //xử lý tự động chạy
         private BackgroundWorker backgroundWorker;
-        private TimeSpan sleepDuration = TimeSpan.FromMinutes(Program.setupGmail.Timer);
+  
         //public frmMain(string _userName, string _fullName)
         public frmMain(UserInfo user_info)
         {
             InitializeComponent();
+            _logger = new FileLogger();
 
-            
             USERNAME = user_info.ma_nd;
             FULLNAME = user_info.ten_nd;
             _DATASOURCE_STRING_DEST = user_info.data_source;
@@ -63,14 +65,27 @@ namespace GetInvoice
 
         private async void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            while (Program.setupGmail.EnableCal)
+            try
             {
-                // Run your task here
-                await AutoReadGmail();
 
-                // Delay for the specified sleep duration
-                await Task.Delay(sleepDuration);
+                while (!string.IsNullOrEmpty(local_user.domain))
+                {
+                    // Run your task here
+                    await AutoReadGmail();
+
+                    // Delay for the specified sleep duration
+                    await Task.Delay(TimeSpan.FromMinutes(Program.setupGmail.Timer));
+                }
             }
+            catch (Exception ex)
+            {
+                if (!Program.setupGmail.EnableCal)
+                {
+                    _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                }    
+                return;
+            }
+            
         }
 
         private async Task AutoReadGmail()
@@ -97,11 +112,23 @@ namespace GetInvoice
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            tslblMail.Text = local_user.gmail;
-            tslblUserName.Text = FULLNAME + " (" + USERNAME + ")";
-            tslblDataSource.Text = "Data source: " + _DATABASE_STRING;
-            tslblDatabase.Text = "Database name: " + _DATABASE_NAME;
-            LoadGrid(USERNAME);
+            try
+            {
+                //throw new NotImplementedException();
+                tslblMail.Text = local_user.gmail;
+                tslblUserName.Text = FULLNAME + " (" + USERNAME + ")";
+                tslblDataSource.Text = "Data source: " + _DATABASE_STRING;
+                tslblDatabase.Text = "Database name: " + _DATABASE_NAME;
+                LoadGrid(USERNAME);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr frmErr = new frmErr(LogType.Error,this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr.ShowDialog();
+                return;
+            }
+          
         }
 
         private void tsbtnSync_Click(object sender, EventArgs e)

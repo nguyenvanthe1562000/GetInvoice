@@ -629,7 +629,8 @@ namespace GetInvoice
 )";
 
         public static string _createLogGmail = @"CREATE TABLE [dbo].[f_LogGmail](
-	            [IdGmail] [VARCHAR](128) DEFAULT('') NOT NULL
+	            [IdGmail] [VARCHAR](128) DEFAULT('') NOT NULL,
+                [Domain] [VARCHAR](228) DEFAULT('') NOT NULL
             )
       ";
     }

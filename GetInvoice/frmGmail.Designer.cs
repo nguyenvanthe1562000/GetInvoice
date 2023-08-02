@@ -29,7 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmGmail));
             this.pn_Timer = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.num_LoadMailTime = new System.Windows.Forms.NumericUpDown();
             this.num_Timer = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,12 +54,15 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.btn_CheckConnectDomain = new System.Windows.Forms.Button();
             this.pn_Timer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.num_LoadMailTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_Timer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // pn_Timer
             // 
+            this.pn_Timer.Controls.Add(this.label8);
+            this.pn_Timer.Controls.Add(this.num_LoadMailTime);
             this.pn_Timer.Controls.Add(this.num_Timer);
             this.pn_Timer.Controls.Add(this.label3);
             this.pn_Timer.Controls.Add(this.label2);
@@ -67,6 +73,22 @@
             this.pn_Timer.TabIndex = 0;
             this.pn_Timer.Visible = false;
             this.pn_Timer.Paint += new System.Windows.Forms.PaintEventHandler(this.pn_Timer_Paint);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(422, 5);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(79, 20);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Last date";
+            // 
+            // num_LoadMailTime
+            // 
+            this.num_LoadMailTime.Location = new System.Drawing.Point(507, 3);
+            this.num_LoadMailTime.Name = "num_LoadMailTime";
+            this.num_LoadMailTime.Size = new System.Drawing.Size(53, 26);
+            this.num_LoadMailTime.TabIndex = 8;
             // 
             // num_Timer
             // 
@@ -171,6 +193,7 @@
             this.txt_PassWord.PasswordChar = '*';
             this.txt_PassWord.Size = new System.Drawing.Size(277, 26);
             this.txt_PassWord.TabIndex = 9;
+            this.txt_PassWord.Validating += new System.ComponentModel.CancelEventHandler(this.txt_PassWord_Validating);
             // 
             // label6
             // 
@@ -200,6 +223,7 @@
             this.txt_Domain.Size = new System.Drawing.Size(277, 26);
             this.txt_Domain.TabIndex = 12;
             this.txt_Domain.TextChanged += new System.EventHandler(this.txt_Domain_TextChanged);
+            this.txt_Domain.Validating += new System.ComponentModel.CancelEventHandler(this.txt_Domain_Validating);
             // 
             // ckb_IsDomain
             // 
@@ -242,7 +266,6 @@
             // 
             // btn_CheckConnectDomain
             // 
-            this.btn_CheckConnectDomain.Enabled = false;
             this.btn_CheckConnectDomain.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_CheckConnectDomain.Location = new System.Drawing.Point(116, 285);
             this.btn_CheckConnectDomain.Name = "btn_CheckConnectDomain";
@@ -273,12 +296,14 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ckb_EnableCal);
             this.Controls.Add(this.pn_Timer);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmGmail";
             this.Text = "Thiết lập Gmail";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmGmail_FormClosing);
             this.Load += new System.EventHandler(this.frmGmail_Load);
             this.pn_Timer.ResumeLayout(false);
             this.pn_Timer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.num_LoadMailTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_Timer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
@@ -309,5 +334,7 @@
         private System.Windows.Forms.TextBox txt_Pdf;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Button btn_CheckConnectDomain;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown num_LoadMailTime;
     }
 }

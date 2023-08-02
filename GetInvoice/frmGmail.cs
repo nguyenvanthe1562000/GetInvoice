@@ -102,6 +102,7 @@ namespace GetInvoice
                 this.num_Timer.Value = setupGmail.Timer;
                 this.txt_Subject.Text = setupGmail.FindSubject;
                 this.txt_Pdf.Text = setupGmail.PathPDF;
+                this.num_LoadMailTime.Value = setupGmail.LoadMailTime;
             }
         }
         void SaveSetUpGmail()
@@ -117,10 +118,10 @@ namespace GetInvoice
                 setupGmail.FindSubject = this.txt_Subject.Text;
                 setupGmail.Timer = Convert.ToInt32(this.num_Timer.Value);
                 setupGmail.PathPDF = this.txt_Pdf.Text;
-
+                setupGmail.LoadMailTime = Convert.ToInt32(this.num_LoadMailTime.Value);
                 string json = JsonConvert.SerializeObject(setupGmail);
                 File.WriteAllText(FilePath, json);
-                utilities.ExeSQL($"update s_user set gmail= '{local_user.gmail}', domain='{local_user.domain}'" +
+                utilities.ExeSQL($"update s_user set gmail= '{local_user.gmail}', domain='{local_user.domain}'," +
                     $"password = '{local_user.password}' ");
                 this.Close();
             }
@@ -247,6 +248,43 @@ namespace GetInvoice
             }
             else
                 MessageBox.Show("Kết nối không thành công", "Cảnh báo");
+        }
+
+        private void txt_PassWord_Validating(object sender, CancelEventArgs e)
+        {
+            
+            validate();
+        }
+        void validate()
+        {
+
+            if (string.IsNullOrEmpty(txt_PassWord.Text.Trim()) && string.IsNullOrEmpty(txt_Domain.Text))
+            {
+                errorProvider1.SetError(txt_PassWord, null);
+                errorProvider1.SetError(txt_Domain, null);
+            } 
+            else
+            {
+                if (string.IsNullOrEmpty(txt_PassWord.Text.Trim()) || string.IsNullOrEmpty(txt_Domain.Text))
+                {
+                    errorProvider1.SetError(txt_PassWord, "Bạn chưa điền PassWord");
+                    errorProvider1.SetError(txt_Domain, "Bạn chưa điền Domain");
+                }
+                else
+                {
+
+                    errorProvider1.SetError(txt_PassWord, null);
+                    errorProvider1.SetError(txt_Domain, null);
+
+                }
+            }
+            
+        }
+
+        private void txt_Domain_Validating(object sender, CancelEventArgs e)
+        {
+            validate();
+
         }
     }
 }
