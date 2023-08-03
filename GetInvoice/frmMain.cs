@@ -82,6 +82,8 @@ namespace GetInvoice
                 if (!Program.setupGmail.EnableCal)
                 {
                     _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                    frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                    frmErr.ShowDialog();
                 }    
                 return;
             }
@@ -114,7 +116,7 @@ namespace GetInvoice
         {
             try
             {
-                //throw new NotImplementedException();
+                throw new NotImplementedException();
                 tslblMail.Text = local_user.gmail;
                 tslblUserName.Text = FULLNAME + " (" + USERNAME + ")";
                 tslblDataSource.Text = "Data source: " + _DATABASE_STRING;
@@ -191,7 +193,10 @@ namespace GetInvoice
             }
             catch (Exception ex)
             {
-                Message_Box_Error(ex.Message.ToString());
+                
+                _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr.ShowDialog();
             }
         }
 
@@ -334,12 +339,25 @@ namespace GetInvoice
             }
             catch (Exception ex)
             {
+
+                
+
                 if (ex.Message.Contains("Cannot insert duplicate key in object 'dbo.f_hoadon'"))
                 {
-                    return "Hóa đơn tồn tại trong cơ sở dữ liệu";
+                   
+                    _logger.Log(LogType.Error, "Hóa đơn tồn tại trong cơ sở dữ liệu", new StackTrace(ex, true).GetFrames().Last());
+                    frmErr frmErr = new frmErr(LogType.Error, this.Text, "Hóa đơn tồn tại trong cơ sở dữ liệu", new StackTrace(ex, true).GetFrames().Last());
+                    frmErr.ShowDialog();
+                   
                 }
                 else
-                    return ex.Message;
+                {
+                    _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                    frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                    frmErr.ShowDialog();
+                    
+                }
+                return "";
             }
         }
         #endregion
@@ -379,6 +397,9 @@ namespace GetInvoice
             }
             catch (Exception ex)
             {
+                _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr.ShowDialog();
                 return null;
             }
         }

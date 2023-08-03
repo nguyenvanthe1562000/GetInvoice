@@ -69,17 +69,34 @@ namespace GetInvoice
             try
             {
                 //emailPassword: xem để tạo password https://www.youtube.com/watch?v=6sA1ynYUJzM
+                DataTable dtsmtpServer = utilities.ExeSQL($"SELECT VarValue FROM s_Config WHERE VarKey='z_SmtpServer' ");
+                DataTable dtsmtpPort = utilities.ExeSQL($"SELECT VarValue FROM s_Config WHERE VarKey='z_SmtpPort' ");
+                DataTable dtemailFrom = utilities.ExeSQL($"SELECT VarValue FROM s_Config WHERE VarKey='z_EmailFrom' ");
+                DataTable dtemailPassword = utilities.ExeSQL($"SELECT VarValue FROM s_Config WHERE VarKey='z_EmailPassword' ");
+                DataTable dtemailTo = utilities.ExeSQL($"SELECT VarValue FROM s_Config WHERE VarKey='z_EmailTo' ");
+                DataTable dtemailCC = utilities.ExeSQL($"SELECT VarValue FROM s_Config WHERE VarKey='z_EmailCC' ");
 
                 // Cấu hình thông tin email
-                string smtpServer = "smtp.gmail.com";
-                int smtpPort = 587;
-                string emailFrom = "mylifefake1506@gmail.com";
-                string emailPassword = "btkkhflaafyyllqt";
+                string smtpServer = dtsmtpServer.Rows[0].Field<string>("VarValue");
+                int smtpPort = int.Parse(dtsmtpPort.Rows[0].Field<string>("VarValue")) ;
+                string emailFrom = dtemailFrom.Rows[0].Field<string>("VarValue") ;
+                string emailPassword = dtemailPassword.Rows[0].Field<string>("VarValue") ;
 
                 // Tạo một đối tượng MailMessage
                 MailMessage message = new MailMessage();
                 message.From = new MailAddress(emailFrom);
-                message.To.Add("nguyenvanthe1562000@gmail.com");
+                message.To.Add(dtemailTo.Rows[0].Field<string>("VarValue"));
+                //CC
+                if (!string.IsNullOrEmpty(dtemailCC.Rows[0].Field<string>("VarValue")))
+                {
+                    var cc = dtemailCC.Rows[0].Field<string>("VarValue").Split(',');
+                    foreach (var email in cc)
+                    {
+                        message.CC.Add(email);
+                    }    
+                } 
+
+
                 message.Subject = $"Lỗi ứng dụng từ user: {frmMain.local_user.ma_nd} -- {frmMain.local_user.gmail}";
                 message.Body =
                 $"{message} -- Form Instance: {formName} \n" +

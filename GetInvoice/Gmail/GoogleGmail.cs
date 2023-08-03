@@ -78,8 +78,8 @@ namespace GetInvoice.Gmail
 
                 DataTable dtImport = new DataTable();
                 dtImport.TableName = "f_LogGmail";
-                dtLastImport.Columns.Add("IdEmail", typeof(string));
-                dtLastImport.Columns.Add("Domain", typeof(string));
+                dtImport.Columns.Add("IdEmail", typeof(string));
+                dtImport.Columns.Add("Domain", typeof(string));
 
 
                 GmailService GmailService = GmailAPIHelper.GetService();
