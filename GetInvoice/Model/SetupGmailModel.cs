@@ -16,6 +16,8 @@ namespace GetInvoice.Model
         public string FindSubject { get; set; }
         public string PathPDF { get; set; }
         public int LoadMailTime { get; set; }
+        public bool MailDownload { get; set; }
+        public bool GOVDownload { get; set; }
 
 
     }

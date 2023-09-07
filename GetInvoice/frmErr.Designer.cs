@@ -62,16 +62,16 @@
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(96, 116);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(166, 38);
+            this.button2.Size = new System.Drawing.Size(175, 38);
             this.button2.TabIndex = 2;
-            this.button2.Text = "Gửi cho Invoice..";
+            this.button2.Text = "Gửi lỗi cho kỹ thuật";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(268, 116);
+            this.button3.Location = new System.Drawing.Point(277, 116);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(96, 38);
             this.button3.TabIndex = 3;

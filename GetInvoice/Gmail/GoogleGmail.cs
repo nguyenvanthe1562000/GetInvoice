@@ -93,7 +93,7 @@ namespace GetInvoice.Gmail
                 {
                     subjectQuery = $"subject:{item} AND";
                 }
-                DateTime sevenDaysAgo = DateTime.Now.AddDays(-1*(setupGmail.LoadMailTime>0? setupGmail.LoadMailTime:-7));
+                DateTime sevenDaysAgo = DateTime.Now.AddDays(-1*(setupGmail.LoadMailTime>0? setupGmail.LoadMailTime:7));
                 string formattedDate = sevenDaysAgo.ToString("yyyy/MM/dd");
                 subjectQuery += $"after:{formattedDate}";
 
@@ -215,7 +215,7 @@ namespace GetInvoice.Gmail
                         }
 
                     }
-                    var row = utilities.InsertTable(dtImport);
+                    var row = utilities.InsertMultiRowTable(dtImport);
                 }
                 return EmailList;
             }

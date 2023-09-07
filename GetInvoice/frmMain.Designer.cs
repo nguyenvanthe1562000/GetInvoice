@@ -38,17 +38,21 @@ namespace GetInvoice
             this.tsbtnExportExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbtnViewer = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbtnChangePassword = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbtnTest = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbtnDefineXML = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbtnDownloadMail = new System.Windows.Forms.ToolStripMenuItem();
             this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setupEmailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.tslblMail = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblUserName = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblDatabase = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslblDataSource = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tslblMail = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tslbl_Status = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusDropdown_StatusProgram = new System.Windows.Forms.ToolStripDropDownButton();
             this.gridDanhSachHoaDon = new DevExpress.XtraGrid.GridControl();
             this.grvDanhSachHoaDon = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -94,9 +98,6 @@ namespace GetInvoice
             this.txtTen_Dvi_Mua = new DevExpress.XtraEditors.TextEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.txtTen_NMua = new DevExpress.XtraEditors.TextEdit();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tslbl_Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.gridColumn14 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumn15 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -180,13 +181,13 @@ namespace GetInvoice
             this.tsbtnExportExcel,
             this.tsbtnViewer,
             this.tsbtnChangePassword,
-            this.tsbtnTest,
             this.tsbtnDefineXML,
             this.tsbtnDownloadMail,
-            this.setupToolStripMenuItem});
+            this.setupToolStripMenuItem,
+            this.toolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1580, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1580, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -195,7 +196,7 @@ namespace GetInvoice
             // 
             this.tsbtnLoad.Image = global::GetInvoice.Properties.Resources.folder_search_icon;
             this.tsbtnLoad.Name = "tsbtnLoad";
-            this.tsbtnLoad.Size = new System.Drawing.Size(171, 26);
+            this.tsbtnLoad.Size = new System.Drawing.Size(171, 24);
             this.tsbtnLoad.Text = "Lấy toàn bộ dữ liệu";
             this.tsbtnLoad.Click += new System.EventHandler(this.tsbtnLoad_Click);
             // 
@@ -203,7 +204,7 @@ namespace GetInvoice
             // 
             this.tsbtnLayDuLieuImport.Image = global::GetInvoice.Properties.Resources.Search_icon;
             this.tsbtnLayDuLieuImport.Name = "tsbtnLayDuLieuImport";
-            this.tsbtnLayDuLieuImport.Size = new System.Drawing.Size(192, 26);
+            this.tsbtnLayDuLieuImport.Size = new System.Drawing.Size(192, 24);
             this.tsbtnLayDuLieuImport.Text = "Lấy dữ liệu vừa import";
             this.tsbtnLayDuLieuImport.Click += new System.EventHandler(this.tsbtnLayDuLieuImport_Click);
             // 
@@ -211,7 +212,7 @@ namespace GetInvoice
             // 
             this.tsbtnSync.Image = global::GetInvoice.Properties.Resources.MetroUI_Apps_Live_Sync_icon;
             this.tsbtnSync.Name = "tsbtnSync";
-            this.tsbtnSync.Size = new System.Drawing.Size(134, 26);
+            this.tsbtnSync.Size = new System.Drawing.Size(134, 24);
             this.tsbtnSync.Text = "Load file XML";
             this.tsbtnSync.Click += new System.EventHandler(this.tsbtnSync_Click);
             // 
@@ -219,7 +220,7 @@ namespace GetInvoice
             // 
             this.tsbtnExportExcel.Image = ((System.Drawing.Image)(resources.GetObject("tsbtnExportExcel.Image")));
             this.tsbtnExportExcel.Name = "tsbtnExportExcel";
-            this.tsbtnExportExcel.Size = new System.Drawing.Size(111, 26);
+            this.tsbtnExportExcel.Size = new System.Drawing.Size(111, 24);
             this.tsbtnExportExcel.Text = "Xuất Excel";
             this.tsbtnExportExcel.Click += new System.EventHandler(this.tsbtnExportExcel_Click);
             // 
@@ -227,37 +228,29 @@ namespace GetInvoice
             // 
             this.tsbtnViewer.Image = ((System.Drawing.Image)(resources.GetObject("tsbtnViewer.Image")));
             this.tsbtnViewer.Name = "tsbtnViewer";
-            this.tsbtnViewer.Size = new System.Drawing.Size(171, 26);
+            this.tsbtnViewer.Size = new System.Drawing.Size(171, 24);
             this.tsbtnViewer.Text = "Xem trước theo file";
             this.tsbtnViewer.Click += new System.EventHandler(this.tsbtnViewer_Click);
             // 
             // tsbtnChangePassword
             // 
             this.tsbtnChangePassword.Name = "tsbtnChangePassword";
-            this.tsbtnChangePassword.Size = new System.Drawing.Size(112, 26);
+            this.tsbtnChangePassword.Size = new System.Drawing.Size(112, 24);
             this.tsbtnChangePassword.Text = "Đổi mật khẩu";
             this.tsbtnChangePassword.Click += new System.EventHandler(this.tsbtnChangePassword_Click);
-            // 
-            // tsbtnTest
-            // 
-            this.tsbtnTest.Name = "tsbtnTest";
-            this.tsbtnTest.Size = new System.Drawing.Size(49, 24);
-            this.tsbtnTest.Text = "Test";
-            this.tsbtnTest.Visible = false;
-            this.tsbtnTest.Click += new System.EventHandler(this.tsbtnTest_Click);
             // 
             // tsbtnDefineXML
             // 
             this.tsbtnDefineXML.Name = "tsbtnDefineXML";
-            this.tsbtnDefineXML.Size = new System.Drawing.Size(154, 26);
+            this.tsbtnDefineXML.Size = new System.Drawing.Size(154, 24);
             this.tsbtnDefineXML.Text = "Khai báo bảng map";
             this.tsbtnDefineXML.Click += new System.EventHandler(this.tsbtnDefineXML_Click);
             // 
             // tsbtnDownloadMail
             // 
             this.tsbtnDownloadMail.Name = "tsbtnDownloadMail";
-            this.tsbtnDownloadMail.Size = new System.Drawing.Size(76, 26);
-            this.tsbtnDownloadMail.Text = "Tải mail";
+            this.tsbtnDownloadMail.Size = new System.Drawing.Size(99, 24);
+            this.tsbtnDownloadMail.Text = "Tải HD mới";
             this.tsbtnDownloadMail.Click += new System.EventHandler(this.tsbtnDownloadMail_Click);
             // 
             // setupToolStripMenuItem
@@ -265,7 +258,7 @@ namespace GetInvoice
             this.setupToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setupEmailToolStripMenuItem});
             this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
-            this.setupToolStripMenuItem.Size = new System.Drawing.Size(61, 26);
+            this.setupToolStripMenuItem.Size = new System.Drawing.Size(61, 24);
             this.setupToolStripMenuItem.Text = "Setup";
             // 
             // setupEmailToolStripMenuItem
@@ -274,6 +267,11 @@ namespace GetInvoice
             this.setupEmailToolStripMenuItem.Size = new System.Drawing.Size(193, 26);
             this.setupEmailToolStripMenuItem.Text = "Thiết lập Gmail";
             this.setupEmailToolStripMenuItem.Click += new System.EventHandler(this.setupEmailToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(14, 24);
             // 
             // statusStrip1
             // 
@@ -286,7 +284,8 @@ namespace GetInvoice
             this.tslblMail,
             this.toolStripStatusLabel2,
             this.tslbl_Status,
-            this.toolStripStatusLabel3});
+            this.toolStripStatusLabel3,
+            this.statusDropdown_StatusProgram});
             this.statusStrip1.Location = new System.Drawing.Point(0, 827);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(19, 0, 1, 0);
@@ -294,12 +293,6 @@ namespace GetInvoice
             this.statusStrip1.Size = new System.Drawing.Size(1580, 26);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // tslblMail
-            // 
-            this.tslblMail.Name = "tslblMail";
-            this.tslblMail.Size = new System.Drawing.Size(66, 20);
-            this.tslblMail.Text = "tslblMail";
             // 
             // tslblUserName
             // 
@@ -326,6 +319,42 @@ namespace GetInvoice
             this.tslblDataSource.Size = new System.Drawing.Size(15, 20);
             this.tslblDataSource.Text = "_";
             // 
+            // tslblMail
+            // 
+            this.tslblMail.Name = "tslblMail";
+            this.tslblMail.Size = new System.Drawing.Size(66, 20);
+            this.tslblMail.Text = "tslblMail";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(48, 20);
+            this.toolStripStatusLabel2.Text = "Gmail";
+            // 
+            // tslbl_Status
+            // 
+            this.tslbl_Status.Name = "tslbl_Status";
+            this.tslbl_Status.Size = new System.Drawing.Size(32, 20);
+            this.tslbl_Status.Text = "| .....";
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabel3.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStripStatusLabel3.Size = new System.Drawing.Size(78, 20);
+            this.toolStripStatusLabel3.Text = "Trạng thái:";
+            // 
+            // statusDropdown_StatusProgram
+            // 
+            this.statusDropdown_StatusProgram.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statusDropdown_StatusProgram.Image = global::GetInvoice.Properties.Resources.MetroUI_Apps_Live_Sync_icon;
+            this.statusDropdown_StatusProgram.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.statusDropdown_StatusProgram.Name = "statusDropdown_StatusProgram";
+            this.statusDropdown_StatusProgram.ShowDropDownArrow = false;
+            this.statusDropdown_StatusProgram.Size = new System.Drawing.Size(127, 24);
+            this.statusDropdown_StatusProgram.Text = "trạng thái dữ liệu";
+            this.statusDropdown_StatusProgram.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
+            // 
             // gridDanhSachHoaDon
             // 
             this.gridDanhSachHoaDon.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -339,7 +368,7 @@ namespace GetInvoice
             this.gridDanhSachHoaDon.Name = "gridDanhSachHoaDon";
             this.gridDanhSachHoaDon.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemCheckEdit1});
-            this.gridDanhSachHoaDon.Size = new System.Drawing.Size(1576, 333);
+            this.gridDanhSachHoaDon.Size = new System.Drawing.Size(1576, 335);
             this.gridDanhSachHoaDon.TabIndex = 0;
             this.gridDanhSachHoaDon.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.grvDanhSachHoaDon});
@@ -379,10 +408,10 @@ namespace GetInvoice
             this.groupControl2.Controls.Add(this.lblPathFile);
             this.groupControl2.Controls.Add(this.gridDanhSachHoaDon);
             this.groupControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupControl2.Location = new System.Drawing.Point(0, 30);
+            this.groupControl2.Location = new System.Drawing.Point(0, 28);
             this.groupControl2.Margin = new System.Windows.Forms.Padding(4);
             this.groupControl2.Name = "groupControl2";
-            this.groupControl2.Size = new System.Drawing.Size(1580, 363);
+            this.groupControl2.Size = new System.Drawing.Size(1580, 365);
             this.groupControl2.TabIndex = 3;
             this.groupControl2.Text = "Danh sách hóa đơn";
             // 
@@ -963,25 +992,6 @@ namespace GetInvoice
             this.txtTen_NMua.Size = new System.Drawing.Size(536, 22);
             this.txtTen_NMua.TabIndex = 0;
             // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(48, 20);
-            this.toolStripStatusLabel2.Text = "Gmail";
-            // 
-            // toolStripStatusLabel3
-            // 
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(78, 20);
-            this.toolStripStatusLabel3.Text = "Trạng thái:";
-            // 
-            // tslbl_Status
-            // 
-            this.tslbl_Status.Name = "tslbl_Status";
-            this.tslbl_Status.Size = new System.Drawing.Size(32, 20);
-            this.tslbl_Status.Text = "| .....";
-            // 
             // gridColumn14
             // 
             this.gridColumn14.Caption = "Ngày hóa đơn";
@@ -1513,7 +1523,6 @@ namespace GetInvoice
         private System.Windows.Forms.ToolStripStatusLabel tslblDatabase;
         private System.Windows.Forms.ToolStripMenuItem tsbtnDefineXML;
         private System.Windows.Forms.ToolStripMenuItem tsbtnChangePassword;
-        private System.Windows.Forms.ToolStripMenuItem tsbtnTest;
         private System.Windows.Forms.LinkLabel lblPathFile;
         private System.Windows.Forms.Label label1;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumn12;
@@ -1550,5 +1559,7 @@ namespace GetInvoice
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel tslbl_Status;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripDropDownButton statusDropdown_StatusProgram;
     }
 }

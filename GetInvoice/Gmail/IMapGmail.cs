@@ -124,7 +124,7 @@ namespace GetInvoice.Gmail
                     GMail.MailDateTime = message.Date.ToString("dd/MM/yyyy");
                     EmailList.Add(GMail);
                 }
-                var row = utilities.InsertTable(dtImport);
+                var row = utilities.InsertMultiRowTable(dtImport);
                 return EmailList;
             }
             catch (Exception ex)

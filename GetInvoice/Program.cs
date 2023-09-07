@@ -66,6 +66,11 @@ namespace GetInvoice
         public string domain { get; set; }
         public string gmail { get; set; }
         public string password { get; set; }
+        public string username_MST { get; set; }
+
+        public string password_MST { get; set; }
+
+       
     }
 
     //public static class Globals

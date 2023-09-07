@@ -280,7 +280,61 @@ namespace GetInvoice
 
             }
         }
+        public static int InsertMultiRowTable(DataTable _datatable)
+        {
+            try
+            {
+                string _list_cols = "";
+                string _list_cols_var = "";
+                string _list_values = "";
+                string _sqlInsert = "";
+                int _res = 0;
+                using (var new_conn = new SqlConnection(ConfigurationManager.ConnectionStrings[NAME_CONNECTION_STRING].ToString()))
+                {
+                    if (new_conn.State != ConnectionState.Open)
+                        new_conn.Open();
 
+                    SqlCommand cmdInsert = new_conn.CreateCommand();
+                    foreach (DataColumn dc in _datatable.Columns)
+                    {
+                        if (_datatable.Rows[0][dc].ToString() != "")
+                        {
+                            _list_cols += dc.ColumnName + ", ";
+                            
+                        }
+                    }
+                    foreach (DataRow dataRow in _datatable.Rows)
+                    {
+                        foreach (DataColumn dc in _datatable.Columns)
+                        {
+                                _list_cols_var += $", '{dataRow[dc.ColumnName]}' ";
+
+                        }
+                        _list_cols_var = _list_cols_var.Substring(1, _list_cols_var.Length - 1);
+
+                        _list_values += $",({_list_cols_var})";
+                        _list_cols_var = "";
+                    }
+                    _list_values = _list_values.Substring(1, _list_values.Length - 1);
+
+                    _list_cols = _list_cols.Remove(_list_cols.Length - 2);
+                    _sqlInsert = string.Format("INSERT INTO {0} ({1}) VALUES{2} SELECT SCOPE_IDENTITY() ", _datatable.TableName, _list_cols, _list_values);
+                    cmdInsert.CommandText = string.Format(_sqlInsert);
+                    cmdInsert.CommandType = CommandType.Text;
+                    _res = (int)cmdInsert.ExecuteScalar();
+
+                }
+                return _res;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            finally
+            {
+
+            }
+        }
         //public static IEnumerable<string> GetInsertQueryFromDataTable(DataTable dataTable)
         //{
         //    foreach (DataRow row in dataTable.AsEnumerable())
@@ -406,7 +460,7 @@ namespace GetInvoice
                     if (conn.State != ConnectionState.Open)
                         conn.Open();
                     SqlCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = string.Format("select ma_nd, ten_nd, trangthai, data_source, database_name, user_sql, pass_sql, expired_date, path_load_file,[gmail],domain,password " +
+                    cmd.CommandText = string.Format("select ma_nd, ten_nd, trangthai, data_source, database_name, user_sql, pass_sql, expired_date, path_load_file,[gmail],domain,password, username_MST,password_MST " +
                         "from s_user where ma_nd=@ma_nd");
                     cmd.Parameters.Add("@ma_nd", SqlDbType.NVarChar, 50).Value = _user;
                     cmd.CommandType = CommandType.Text;
@@ -428,6 +482,8 @@ namespace GetInvoice
                     resUser.domain = dt.Rows[0]["domain"].ToString();
                     resUser.password = dt.Rows[0]["password"].ToString();
                     resUser.gmail = dt.Rows[0]["gmail"].ToString();
+                    resUser.username_MST = dt.Rows[0]["username_MST"].ToString();
+                    resUser.password_MST = dt.Rows[0]["password_MST"].ToString();
 
                 }
                 return resUser;

@@ -1,6 +1,6 @@
-﻿using DevExpress.XtraGrid;
-using DevExpress.XtraGrid.Columns;
+﻿using DevExpress.XtraGrid.Columns;
 using GetInvoice.Gmail;
+using GetInvoice.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -10,11 +10,8 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -26,6 +23,7 @@ namespace GetInvoice
     public partial class frmMain : Form
     {
         public static UserInfo local_user;
+        public static HDDTRequestHeader _HDDTRequest;
         private string _DATABASE_STRING = "118.70.81.95,58386";
         private string USERNAME = "";
         private string FULLNAME = "";
@@ -36,11 +34,11 @@ namespace GetInvoice
         private string _DATABASE_NAME_DEST = "";
         private string _USERID_DEST = "";
         private string _PASSWORD_DEST = "";
-        bool _checkTaskMailMess = false;
-        private readonly FileLogger _logger;  
+        private readonly FileLogger _logger;
+        SetupGmailModel setupGmail;
         //xử lý tự động chạy
         private BackgroundWorker backgroundWorker;
-  
+
         //public frmMain(string _userName, string _fullName)
         public frmMain(UserInfo user_info)
         {
@@ -56,7 +54,15 @@ namespace GetInvoice
             local_user = user_info;
             lblPathFile.Visible = true;
             lblPathFile.Text = user_info.path_load_file == "" ? "" : user_info.path_load_file;
-
+            ///
+            var s3 = Application.StartupPath;
+            String FilePath = Path.Combine(s3, "SETUPGMAIL.txt");
+            if (File.Exists(FilePath))
+            {
+                string jsonFromFile = File.ReadAllText(FilePath);
+                this.setupGmail = JsonConvert.DeserializeObject<SetupGmailModel>(jsonFromFile);
+            }
+            ///
             backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += BackgroundWorker_DoWork;
             backgroundWorker.RunWorkerAsync();
@@ -68,7 +74,7 @@ namespace GetInvoice
             try
             {
 
-                while (!string.IsNullOrEmpty(local_user.domain))
+                while (!string.IsNullOrEmpty(local_user.domain) || !string.IsNullOrEmpty(_HDDTRequest.Token))
                 {
                     // Run your task here
                     await AutoReadGmail();
@@ -84,39 +90,69 @@ namespace GetInvoice
                     _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                     frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                     frmErr.ShowDialog();
-                }    
+                }
                 return;
             }
-            
+
         }
 
         private async Task AutoReadGmail()
         {
-            var resutl = await Task.Run(async () =>
+            int RowMail = 0;
+            var Gov = new HDDTReponseMessage();
+            Gov.Messagesfailed = new List<string>();
+            if (this.setupGmail != null)
             {
-                if (!(string.IsNullOrEmpty(local_user.domain)))
+                if (setupGmail.MailDownload)
                 {
-                    IMapGmail mapGmail = new IMapGmail(local_user);
-                    var result = await mapGmail.Start();
-                    return result;
+                    var resutl = await Task.Run(async () =>
+                    {
+                        if (!(string.IsNullOrEmpty(local_user.domain)))
+                        {
+                            IMapGmail mapGmail = new IMapGmail(local_user);
+                            var result = await mapGmail.Start();
+                            return result;
+                        }
+                        else
+                        {
+                            GoogleGmail gmail = new GoogleGmail(local_user);
+                            return await gmail.Star();
+                        }
+
+
+                    });
+                    RowMail = resutl.Count;
                 }
-                else
+                if (setupGmail.GOVDownload)
                 {
-                    GoogleGmail gmail = new GoogleGmail(local_user);
-                    return await gmail.Star();
+                    if (_HDDTRequest.Token != null)
+                    {
+                        HDDT_GOV gov = new HDDT_GOV();
+                        Gov = await gov.Start();
+                    }
                 }
-            });
-            if (!(resutl is null))
+            }
+
+            this.tslbl_Status.Text = $"Có {RowMail}-Mail,{Gov.Message}-GOV HĐ được tải |";
+            if (Gov.Messagesfailed.Count > 0)
             {
-                  this.tslbl_Status.Text = $"Có {resutl.Count} được tải về |";
+                AddStatus(Gov.Messagesfailed);
+            }
+
+        }
+        void AddStatus(List<string> messages)
+        {
+            statusDropdown_StatusProgram.DropDownItems.Clear();
+            foreach (var item in messages)
+            {
+                statusDropdown_StatusProgram.DropDownItems.Add(item);
             }
         }
-
         private void frmMain_Load(object sender, EventArgs e)
         {
             try
             {
-                throw new NotImplementedException();
+
                 tslblMail.Text = local_user.gmail;
                 tslblUserName.Text = FULLNAME + " (" + USERNAME + ")";
                 tslblDataSource.Text = "Data source: " + _DATABASE_STRING;
@@ -126,11 +162,11 @@ namespace GetInvoice
             catch (Exception ex)
             {
                 _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
-                frmErr frmErr = new frmErr(LogType.Error,this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr.ShowDialog();
                 return;
             }
-          
+
         }
 
         private void tsbtnSync_Click(object sender, EventArgs e)
@@ -193,7 +229,7 @@ namespace GetInvoice
             }
             catch (Exception ex)
             {
-                
+
                 _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr.ShowDialog();
@@ -215,7 +251,7 @@ namespace GetInvoice
                 XmlDocument xmldoc = new XmlDocument();
                 xmldoc.Load(xmlFile);
 
-                
+
 
                 //Hoa don
                 DataTable dtMapping_HoaDon = ExeSQL("select * from m_mapping_columns where db_column_name is not null and db_table_name = 'f_hoadon'");
@@ -340,22 +376,22 @@ namespace GetInvoice
             catch (Exception ex)
             {
 
-                
+
 
                 if (ex.Message.Contains("Cannot insert duplicate key in object 'dbo.f_hoadon'"))
                 {
-                   
+
                     _logger.Log(LogType.Error, "Hóa đơn tồn tại trong cơ sở dữ liệu", new StackTrace(ex, true).GetFrames().Last());
                     frmErr frmErr = new frmErr(LogType.Error, this.Text, "Hóa đơn tồn tại trong cơ sở dữ liệu", new StackTrace(ex, true).GetFrames().Last());
                     frmErr.ShowDialog();
-                   
+
                 }
                 else
                 {
                     _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                     frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                     frmErr.ShowDialog();
-                    
+
                 }
                 return "";
             }
@@ -608,35 +644,58 @@ namespace GetInvoice
 
         private async void tsbtnDownloadMail_Click(object sender, EventArgs e)
         {
-
-                     
-            var resutl = await Task.Run(async () =>
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            try
             {
-                if (!(string.IsNullOrEmpty(local_user.domain)))
+              
+                MessageBox.Show("Vui lòng chờ trong giây lát");
+                var resutl = await Task.Run(async () =>
                 {
-                    IMapGmail mapGmail = new IMapGmail(local_user);
-                    var result= await mapGmail.Start();
-                    return result;
-                }    
+                    if (!(string.IsNullOrEmpty(local_user.domain)))
+                    {
+                        IMapGmail mapGmail = new IMapGmail(local_user);
+                        var result = await mapGmail.Start();
+                        return result;
+                    }
+                    else
+                    {
+                        GoogleGmail gmail = new GoogleGmail(local_user);
+
+                        return await gmail.Star();
+
+                    }
+
+                });
+                var Gov = new HDDTReponseMessage();
+                if (_HDDTRequest.Token != null)
+                {
+                    HDDT_GOV gov = new HDDT_GOV();
+                    Gov = await gov.Start();
+
+                }
+                if ((resutl is null) && Gov.Success == false)
+                {
+                    MessageBox.Show("không có mail nào đc đọc");
+                }
                 else
                 {
-                    GoogleGmail gmail = new GoogleGmail(local_user);
-                     
-                    return await gmail.Star();
-              
-                }    
-           
-            });
-        if ((resutl is null))
-            {
-                MessageBox.Show("không có mail nào đc đọc");
-            }    
-        else
-            {
-                MessageBox.Show($"có tổng số {resutl.Count} mail hóa đơn");
-            }
+                    MessageBox.Show($"có tổng số {resutl.Count} mail hóa đơn, có {Gov.Message} từ cổng HDDT GOV");
+                    this.tslbl_Status.Text = $"Có {resutl.Count}-Gmail,{Gov.Message}-GOV HĐ được tải |";
+                }
+                AddStatus(Gov.Messagesfailed);
 
-            // await Task.Delay(10000);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                frmErr.ShowDialog();
+                return;
+
+            }
+            stopwatch.Stop();
+            TimeSpan elapsedTime = stopwatch.Elapsed;
 
         }
 
@@ -649,6 +708,11 @@ namespace GetInvoice
         {
 
         }
-       
+
+        private void xemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmInvoiceView frmInvoiceView = new frmInvoiceView();
+            frmInvoiceView.ShowDialog();
+        }
     }
 }

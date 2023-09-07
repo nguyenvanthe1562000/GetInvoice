@@ -38,12 +38,16 @@ namespace GetInvoice
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cboConnections = new DevExpress.XtraEditors.LookUpEdit();
+            this.img_Captcha = new System.Windows.Forms.PictureBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txt_captcha_GOV = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.cboConnections.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.img_Captcha)).BeginInit();
             this.SuspendLayout();
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(143, 121);
+            this.btnLogin.Location = new System.Drawing.Point(215, 198);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 28);
             this.btnLogin.TabIndex = 0;
@@ -53,7 +57,7 @@ namespace GetInvoice
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(224, 121);
+            this.btnExit.Location = new System.Drawing.Point(296, 198);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 28);
             this.btnExit.TabIndex = 1;
@@ -67,7 +71,7 @@ namespace GetInvoice
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(30, 31);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
+            this.label1.Size = new System.Drawing.Size(101, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Tên đăng nhập";
             // 
@@ -75,7 +79,7 @@ namespace GetInvoice
             // 
             this.txtUsername.Location = new System.Drawing.Point(117, 31);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(182, 21);
+            this.txtUsername.Size = new System.Drawing.Size(254, 24);
             this.txtUsername.TabIndex = 3;
             this.txtUsername.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUsername_KeyPress);
             // 
@@ -84,7 +88,7 @@ namespace GetInvoice
             this.txtPassword.Location = new System.Drawing.Point(117, 57);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(182, 21);
+            this.txtPassword.Size = new System.Drawing.Size(254, 24);
             this.txtPassword.TabIndex = 5;
             this.txtPassword.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPassword_KeyPress);
             // 
@@ -94,7 +98,7 @@ namespace GetInvoice
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(30, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.Size = new System.Drawing.Size(64, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = "Mật khẩu";
             // 
@@ -104,7 +108,7 @@ namespace GetInvoice
             this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(30, 88);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(40, 13);
+            this.label3.Size = new System.Drawing.Size(50, 17);
             this.label3.TabIndex = 6;
             this.label3.Text = "Kết nối";
             // 
@@ -112,16 +116,47 @@ namespace GetInvoice
             // 
             this.cboConnections.Location = new System.Drawing.Point(117, 84);
             this.cboConnections.Name = "cboConnections";
+            // 
+            // 
+            // 
             this.cboConnections.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cboConnections.Size = new System.Drawing.Size(182, 20);
+            this.cboConnections.Size = new System.Drawing.Size(182, 22);
             this.cboConnections.TabIndex = 7;
+            // 
+            // img_Captcha
+            // 
+            this.img_Captcha.Location = new System.Drawing.Point(117, 142);
+            this.img_Captcha.Name = "img_Captcha";
+            this.img_Captcha.Size = new System.Drawing.Size(254, 50);
+            this.img_Captcha.TabIndex = 8;
+            this.img_Captcha.TabStop = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(30, 115);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(76, 17);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "HDDT GOV";
+            // 
+            // txt_captcha_GOV
+            // 
+            this.txt_captcha_GOV.Location = new System.Drawing.Point(117, 112);
+            this.txt_captcha_GOV.Name = "txt_captcha_GOV";
+            this.txt_captcha_GOV.Size = new System.Drawing.Size(254, 24);
+            this.txt_captcha_GOV.TabIndex = 10;
             // 
             // frmLogin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(348, 171);
+            this.ClientSize = new System.Drawing.Size(383, 238);
+            this.Controls.Add(this.txt_captcha_GOV);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.img_Captcha);
             this.Controls.Add(this.cboConnections);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtPassword);
@@ -139,6 +174,7 @@ namespace GetInvoice
             this.Load += new System.EventHandler(this.frmLogin_Load);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.frmLogin_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.cboConnections.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.img_Captcha)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -154,5 +190,8 @@ namespace GetInvoice
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private DevExpress.XtraEditors.LookUpEdit cboConnections;
+        private System.Windows.Forms.PictureBox img_Captcha;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txt_captcha_GOV;
     }
 }
