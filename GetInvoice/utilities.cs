@@ -172,7 +172,7 @@ namespace GetInvoice
             {
                 DataTable dt = new DataTable();
                 SqlConnection cnn;
-                string connetionString = string.Format(@"Data Source={0};Initial Catalog={1};User ID={2};Password={3};Connection Timeout=10", _dataSource, _databaseName, _userID, _passSQL);
+                string connetionString = ConfigurationManager.ConnectionStrings[NAME_CONNECTION_STRING].ToString();
                 cnn = new SqlConnection(connetionString);
 
                 if (cnn.State != ConnectionState.Open && DEST_IS_CONNECTED == true)
@@ -208,7 +208,9 @@ namespace GetInvoice
         {
             try
             {
-                string connetionString = string.Format(@"Data Source={0};Initial Catalog={1};User ID={2};Password={3}", _dataSource, _databaseName, _userID, _passSQL);
+                string connetionString = ConfigurationManager.ConnectionStrings[NAME_CONNECTION_STRING].ToString();
+
+
                 using (var conn = new SqlConnection(connetionString))
                 {
                     if (conn.State != ConnectionState.Open)

@@ -25,13 +25,16 @@ namespace GetInvoice.Gmail
     {
         string url = "https://hoadondientu.gdt.gov.vn:30000";
         SetupGmailModel setupGmail;
-        public HDDT_GOV()
+        UserInfo _user;
+
+        public HDDT_GOV(UserInfo user =null)
         {
             setupGmail = Program.setupGmail;
             if (setupGmail.PathPDF is null)
             {
                 throw new Exception("Bạn chưa setup địa chỉ lưu pdf");
             }
+            _user = user;
         }
         public async Task<CaptChaModel> GetCaptChaAsync()
         {
@@ -163,46 +166,46 @@ namespace GetInvoice.Gmail
                 {
                     DataTable dtLastImport = utilities.ExeSQL($"select IdEmail, Domain " +
                         $" from f_LogGmail" +
-                        $" where Domain = 'HDDTGOV'" +
+                        $" where Domain = 'HDDTGOV'" + $" AND created_by='{_user.ma_nd}' "+
                         $" group by IdEmail,Domain");
 
                     DataTable dtImport = new DataTable();
                     dtImport.TableName = "f_LogGmail";
                     dtImport.Columns.Add("IdEmail", typeof(string));
                     dtImport.Columns.Add("Domain", typeof(string));
+                    dtImport.Columns.Add("created_by", typeof(string));
 
+                    List<HDDTPurchaseDetail> PurchaseDetails = listPurchase.SelectMany(x => x.Datas).ToList();
                     if (!(dtLastImport is null))
                     {
-
-                        List<HDDTPurchaseDetail> PurchaseDetails = listPurchase.SelectMany(x => x.Datas).ToList();
+             
                         var idList = dtLastImport.AsEnumerable().Select(rows => rows[0]).ToList();
                         PurchaseDetails.RemoveAll(x => idList.Contains(x.Id));
-                        foreach (var detail in PurchaseDetails)
+
+                    }
+                    foreach (var detail in PurchaseDetails)
+                    {
+
+
+                        var ok = await ExportXml(detail);
+                        if (ok.Success)
                         {
+                            DataRow dataRow = dtImport.NewRow();
+                            dataRow[0] = detail.Id;
+                            dataRow[1] = "HDDTGOV";
+                            dataRow[2] = _user.ma_nd;
 
-                     
-                            var ok = await ExportXml(detail);
-                            if (ok.Success)
-                            {
-                                DataRow dataRow = dtImport.NewRow();
-                                dataRow[0] = detail.Id;
-                                dataRow[1] = "HDDTGOV";
-                                dtImport.Rows.Add(dataRow);
-                            }
-                            else
-                            {
-                                reponseMessage.Messagesfailed.Add(ok.Message);
-                            }
-
-                          
-                           
+                            dtImport.Rows.Add(dataRow);
+                        }
+                        else
+                        {
+                            reponseMessage.Messagesfailed.Add(ok.Message);
                         }
 
-
-                        reponseMessage.Message = dtImport.Rows.Count + "/" + PurchaseDetails.Count ;
-                        var row = utilities.InsertMultiRowTable(dtImport);
                     }
-                   
+
+                    reponseMessage.Message = dtImport.Rows.Count + "/" + PurchaseDetails.Count;
+                    var row = utilities.InsertMultiRowTable(dtImport);
                     return reponseMessage;
 
                 }

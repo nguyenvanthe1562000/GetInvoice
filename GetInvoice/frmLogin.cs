@@ -29,8 +29,10 @@ namespace GetInvoice
             InitializeComponent();
             txtUsername.Select();
             frmMain._HDDTRequest = new Model.HDDTRequestHeader();
+            _logger = new FileLogger();
         }
-
+        CaptChaModel captcha;
+        private readonly FileLogger _logger;
         private void btnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -171,8 +173,7 @@ namespace GetInvoice
             GetImgCaptCha();
 
         }
-        CaptChaModel captcha;
-        private readonly FileLogger _logger;
+    
 
         public async void GetImgCaptCha()
         {
@@ -188,8 +189,8 @@ namespace GetInvoice
                 catch (Exception ex)
                 {
                    
-                    _logger.Log(LogType.Error, "Cổng thuế tạm thời bị ngắt kế nối vui lòng đăng nhập lại sau khi cổng thuế mở", new StackTrace(ex, true).GetFrames().Last());
-                    frmErr frmErr = new frmErr(LogType.Error, this.Text, "Cổng thuế tạm thời bị ngắt kế nối vui lòng đăng nhập lại sau khi cổng thuế mở", new StackTrace(ex, true).GetFrames().Last());
+                    _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                    frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                     frmErr.ShowDialog();
                     return;
                 }

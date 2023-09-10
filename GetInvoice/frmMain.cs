@@ -38,6 +38,8 @@ namespace GetInvoice
         SetupGmailModel setupGmail;
         //xử lý tự động chạy
         private BackgroundWorker backgroundWorker;
+        private Stopwatch stopwatch;
+
 
         //public frmMain(string _userName, string _fullName)
         public frmMain(UserInfo user_info)
@@ -54,15 +56,18 @@ namespace GetInvoice
             local_user = user_info;
             lblPathFile.Visible = true;
             lblPathFile.Text = user_info.path_load_file == "" ? "" : user_info.path_load_file;
+          
             ///
             var s3 = Application.StartupPath;
             String FilePath = Path.Combine(s3, "SETUPGMAIL.txt");
+
             if (File.Exists(FilePath))
             {
                 string jsonFromFile = File.ReadAllText(FilePath);
                 this.setupGmail = JsonConvert.DeserializeObject<SetupGmailModel>(jsonFromFile);
             }
             ///
+
             backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += BackgroundWorker_DoWork;
             backgroundWorker.RunWorkerAsync();
@@ -71,8 +76,15 @@ namespace GetInvoice
 
         private async void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+     
             try
             {
+                var checkVerify = CheckSetUpUserVerify();
+                if (!checkVerify)
+                {
+
+                    return;
+                }
 
                 while (!string.IsNullOrEmpty(local_user.domain) || !string.IsNullOrEmpty(_HDDTRequest.Token))
                 {
@@ -98,6 +110,7 @@ namespace GetInvoice
 
         private async Task AutoReadGmail()
         {
+         
             int RowMail = 0;
             var Gov = new HDDTReponseMessage();
             Gov.Messagesfailed = new List<string>();
@@ -127,7 +140,7 @@ namespace GetInvoice
                 {
                     if (_HDDTRequest.Token != null)
                     {
-                        HDDT_GOV gov = new HDDT_GOV();
+                        HDDT_GOV gov = new HDDT_GOV(local_user);
                         Gov = await gov.Start();
                     }
                 }
@@ -138,14 +151,24 @@ namespace GetInvoice
             {
                 AddStatus(Gov.Messagesfailed);
             }
-
+  
         }
         void AddStatus(List<string> messages)
         {
-            statusDropdown_StatusProgram.DropDownItems.Clear();
+             
+            statusDropdown_StatusProgram_2.DropDownItems.Clear();
+            if (messages != null)
+            {
+                if (messages.Count > 0)
+                    statusDropdown_StatusProgram_2.Image = Properties.Resources.warning__3_;
+            }
+            else
+            {
+                return;
+            }
             foreach (var item in messages)
             {
-                statusDropdown_StatusProgram.DropDownItems.Add(item);
+                statusDropdown_StatusProgram_2.DropDownItems.Add(item);
             }
         }
         private void frmMain_Load(object sender, EventArgs e)
@@ -157,7 +180,9 @@ namespace GetInvoice
                 tslblUserName.Text = FULLNAME + " (" + USERNAME + ")";
                 tslblDataSource.Text = "Data source: " + _DATABASE_STRING;
                 tslblDatabase.Text = "Database name: " + _DATABASE_NAME;
+        
                 LoadGrid(USERNAME);
+              
             }
             catch (Exception ex)
             {
@@ -229,7 +254,6 @@ namespace GetInvoice
             }
             catch (Exception ex)
             {
-
                 _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr.ShowDialog();
@@ -250,8 +274,6 @@ namespace GetInvoice
                 string _res = "";
                 XmlDocument xmldoc = new XmlDocument();
                 xmldoc.Load(xmlFile);
-
-
 
                 //Hoa don
                 DataTable dtMapping_HoaDon = ExeSQL("select * from m_mapping_columns where db_column_name is not null and db_table_name = 'f_hoadon'");
@@ -486,6 +508,7 @@ namespace GetInvoice
 
         private void tsbtnExportExcel_Click(object sender, EventArgs e)
         {
+            startProcess();
             System.Windows.Forms.SaveFileDialog saveDlg = new System.Windows.Forms.SaveFileDialog();
             saveDlg.InitialDirectory = @"C:\";
             saveDlg.Filter = "Excel files (*.xlsx)|*.xlsx";
@@ -528,6 +551,7 @@ namespace GetInvoice
                 gridBangKeHoaDon.ExportToXlsx(path);
                 Process.Start(path);
             }
+            endProcess();
         }
 
         private void grvDanhSachHoaDon_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -566,7 +590,9 @@ namespace GetInvoice
 
         private void tsbtnLoad_Click(object sender, EventArgs e)
         {
+            startProcess();
             LoadGrid(USERNAME);
+            endProcess();
         }
 
         private void tsbtnDefineXML_Click(object sender, EventArgs e)
@@ -601,7 +627,9 @@ namespace GetInvoice
 
         private void tsbtnLayDuLieuImport_Click(object sender, EventArgs e)
         {
+            startProcess();
             Load_LastImport(USERNAME);
+            endProcess();   
         }
 
         private void Load_LastImport(string _ma_nd)
@@ -641,14 +669,12 @@ namespace GetInvoice
             frmGmail.ShowDialog();
             TimeSpan.FromMinutes(Program.setupGmail.Timer);
         }
-
         private async void tsbtnDownloadMail_Click(object sender, EventArgs e)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            startProcess();
             try
             {
-              
+
                 MessageBox.Show("Vui lòng chờ trong giây lát");
                 var resutl = await Task.Run(async () =>
                 {
@@ -670,10 +696,12 @@ namespace GetInvoice
                 var Gov = new HDDTReponseMessage();
                 if (_HDDTRequest.Token != null)
                 {
-                    HDDT_GOV gov = new HDDT_GOV();
+                    HDDT_GOV gov = new HDDT_GOV(local_user);
                     Gov = await gov.Start();
 
                 }
+                endProcess();
+
                 if ((resutl is null) && Gov.Success == false)
                 {
                     MessageBox.Show("không có mail nào đc đọc");
@@ -684,18 +712,18 @@ namespace GetInvoice
                     this.tslbl_Status.Text = $"Có {resutl.Count}-Gmail,{Gov.Message}-GOV HĐ được tải |";
                 }
                 AddStatus(Gov.Messagesfailed);
-
             }
             catch (Exception ex)
             {
+                endProcess();
+
                 _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr.ShowDialog();
                 return;
 
             }
-            stopwatch.Stop();
-            TimeSpan elapsedTime = stopwatch.Elapsed;
+
 
         }
 
@@ -713,6 +741,52 @@ namespace GetInvoice
         {
             frmInvoiceView frmInvoiceView = new frmInvoiceView();
             frmInvoiceView.ShowDialog();
+        }
+        bool CheckSetUpUserVerify()
+        {
+            bool check = true;
+            string mess = "";
+            statusDropdown_StatusProgram_2.Image = null;
+            if (File.Exists(local_user.path_load_file))
+            {
+                check = false;
+                mess = "" + "\n\r đường dẫn load file XML không tồn tại vui lòng setup lại";
+            }
+            return check;
+        }
+
+        private void statusDropdown_StatusProgram_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void statusDropdown_StatusProgram_2_Click(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void statusDropdown_StatusProgram_2_DropDownClosed(object sender, EventArgs e)
+        {
+            statusDropdown_StatusProgram_2.Image = Properties.Resources.icons8_ellipsis_64;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
+            status_Process.Text = stopwatch.Elapsed.ToString();
+        }
+        void startProcess()
+        {
+            stopwatch=new Stopwatch();
+            stopwatch.Start();
+            timer1.Enabled = true;
+            
+        }
+        void endProcess()
+        {
+            timer1.Enabled = false;
+            stopwatch.Stop();
+         
         }
     }
 }

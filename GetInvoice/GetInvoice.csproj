@@ -237,6 +237,8 @@
   <ItemGroup>
     <None Include="Resources\warning.png" />
     <None Include="Resources\warning %283%29.png" />
+    <None Include="Resources\icons8-setting-50.png" />
+    <None Include="Resources\icons8-ellipsis-64.png" />
     <Content Include="synchronized.ico" />
   </ItemGroup>
   <ItemGroup />

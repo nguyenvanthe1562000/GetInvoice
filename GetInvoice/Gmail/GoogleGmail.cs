@@ -73,13 +73,14 @@ namespace GetInvoice.Gmail
             {
                 DataTable dtLastImport = utilities.ExeSQL($"select IdEmail, Domain " +
                      $" from f_LogGmail" +
-                     $" where Domain = '{local_user.gmail}'" +
+                     $" where Domain = '{local_user.gmail}'" + $" AND created_by='{local_user.ma_nd}' " +
                      $" group by IdEmail,Domain");
 
                 DataTable dtImport = new DataTable();
                 dtImport.TableName = "f_LogGmail";
                 dtImport.Columns.Add("IdEmail", typeof(string));
                 dtImport.Columns.Add("Domain", typeof(string));
+                dtImport.Columns.Add("created_by", typeof(string));
 
 
                 GmailService GmailService = GmailAPIHelper.GetService();
@@ -117,6 +118,8 @@ namespace GetInvoice.Gmail
                         DataRow dataRow = dtImport.NewRow();
                         dataRow[0] = Msg.Id;
                         dataRow[1] = local_user.gmail;
+                        dataRow[2] = local_user.ma_nd;
+
                         dtImport.Rows.Add(dataRow);
                     
                         //MESSAGE MARKS AS READ AFTER READING MESSAGE

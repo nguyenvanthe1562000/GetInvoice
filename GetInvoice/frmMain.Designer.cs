@@ -52,7 +52,8 @@ namespace GetInvoice
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslbl_Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusDropdown_StatusProgram = new System.Windows.Forms.ToolStripDropDownButton();
+            this.statusDropdown_StatusProgram_2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.status_Process = new System.Windows.Forms.ToolStripStatusLabel();
             this.gridDanhSachHoaDon = new DevExpress.XtraGrid.GridControl();
             this.grvDanhSachHoaDon = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -234,6 +235,7 @@ namespace GetInvoice
             // 
             // tsbtnChangePassword
             // 
+            this.tsbtnChangePassword.Enabled = false;
             this.tsbtnChangePassword.Name = "tsbtnChangePassword";
             this.tsbtnChangePassword.Size = new System.Drawing.Size(112, 24);
             this.tsbtnChangePassword.Text = "Đổi mật khẩu";
@@ -248,8 +250,9 @@ namespace GetInvoice
             // 
             // tsbtnDownloadMail
             // 
+            this.tsbtnDownloadMail.Image = global::GetInvoice.Properties.Resources.icons8_setting_50;
             this.tsbtnDownloadMail.Name = "tsbtnDownloadMail";
-            this.tsbtnDownloadMail.Size = new System.Drawing.Size(99, 24);
+            this.tsbtnDownloadMail.Size = new System.Drawing.Size(119, 24);
             this.tsbtnDownloadMail.Text = "Tải HD mới";
             this.tsbtnDownloadMail.Click += new System.EventHandler(this.tsbtnDownloadMail_Click);
             // 
@@ -264,8 +267,8 @@ namespace GetInvoice
             // setupEmailToolStripMenuItem
             // 
             this.setupEmailToolStripMenuItem.Name = "setupEmailToolStripMenuItem";
-            this.setupEmailToolStripMenuItem.Size = new System.Drawing.Size(193, 26);
-            this.setupEmailToolStripMenuItem.Text = "Thiết lập Gmail";
+            this.setupEmailToolStripMenuItem.Size = new System.Drawing.Size(231, 26);
+            this.setupEmailToolStripMenuItem.Text = "Thiết lập cổng HDDT";
             this.setupEmailToolStripMenuItem.Click += new System.EventHandler(this.setupEmailToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
@@ -285,7 +288,8 @@ namespace GetInvoice
             this.toolStripStatusLabel2,
             this.tslbl_Status,
             this.toolStripStatusLabel3,
-            this.statusDropdown_StatusProgram});
+            this.statusDropdown_StatusProgram_2,
+            this.status_Process});
             this.statusStrip1.Location = new System.Drawing.Point(0, 827);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(19, 0, 1, 0);
@@ -344,16 +348,23 @@ namespace GetInvoice
             this.toolStripStatusLabel3.Size = new System.Drawing.Size(78, 20);
             this.toolStripStatusLabel3.Text = "Trạng thái:";
             // 
-            // statusDropdown_StatusProgram
+            // statusDropdown_StatusProgram_2
             // 
-            this.statusDropdown_StatusProgram.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.statusDropdown_StatusProgram.Image = global::GetInvoice.Properties.Resources.MetroUI_Apps_Live_Sync_icon;
-            this.statusDropdown_StatusProgram.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.statusDropdown_StatusProgram.Name = "statusDropdown_StatusProgram";
-            this.statusDropdown_StatusProgram.ShowDropDownArrow = false;
-            this.statusDropdown_StatusProgram.Size = new System.Drawing.Size(127, 24);
-            this.statusDropdown_StatusProgram.Text = "trạng thái dữ liệu";
-            this.statusDropdown_StatusProgram.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay;
+            this.statusDropdown_StatusProgram_2.Image = global::GetInvoice.Properties.Resources.icons8_ellipsis_64;
+            this.statusDropdown_StatusProgram_2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.statusDropdown_StatusProgram_2.Name = "statusDropdown_StatusProgram_2";
+            this.statusDropdown_StatusProgram_2.Size = new System.Drawing.Size(159, 24);
+            this.statusDropdown_StatusProgram_2.Text = "Trạng thái dữ liệu";
+            this.statusDropdown_StatusProgram_2.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.statusDropdown_StatusProgram_2.DropDownClosed += new System.EventHandler(this.statusDropdown_StatusProgram_2_DropDownClosed);
+            this.statusDropdown_StatusProgram_2.Click += new System.EventHandler(this.statusDropdown_StatusProgram_2_Click);
+            // 
+            // status_Process
+            // 
+            this.status_Process.IsLink = true;
+            this.status_Process.Name = "status_Process";
+            this.status_Process.Size = new System.Drawing.Size(18, 20);
+            this.status_Process.Text = "...";
             // 
             // gridDanhSachHoaDon
             // 
@@ -992,6 +1003,11 @@ namespace GetInvoice
             this.txtTen_NMua.Size = new System.Drawing.Size(536, 22);
             this.txtTen_NMua.TabIndex = 0;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 1;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // gridColumn14
             // 
             this.gridColumn14.Caption = "Ngày hóa đơn";
@@ -1558,8 +1574,9 @@ namespace GetInvoice
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private System.Windows.Forms.ToolStripStatusLabel tslbl_Status;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripDropDownButton statusDropdown_StatusProgram;
+        private System.Windows.Forms.ToolStripDropDownButton statusDropdown_StatusProgram_2;
+        private System.Windows.Forms.ToolStripStatusLabel status_Process;
+        private System.Windows.Forms.Timer timer1;
     }
 }

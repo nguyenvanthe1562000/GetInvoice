@@ -39,13 +39,14 @@ namespace GetInvoice.Gmail
             {
                 DataTable dtLastImport = utilities.ExeSQL($"select IdEmail, Domain " +
                     $" from f_LogGmail" +
-                    $" where Domain = '{local_user.domain}'" +
+                    $" where Domain = '{local_user.domain}'" + $" AND created_by='{local_user.ma_nd}' " +
                     $" group by IdEmail,Domain");
 
                 DataTable dtImport = new DataTable();
                 dtImport.TableName = "f_LogGmail";
                 dtImport.Columns.Add("IdEmail", typeof(string));
                 dtImport.Columns.Add("Domain", typeof(string));
+                dtImport.Columns.Add("created_by", typeof(string));
 
                 ImapClient client = new ImapClient(local_user.domain, local_user.gmail, local_user.password);
                 client.SelectFolder("Inbox");
@@ -86,6 +87,8 @@ namespace GetInvoice.Gmail
                     DataRow dataRow = dtImport.NewRow();
                     dataRow[0] = info.UniqueId;
                     dataRow[1] =  local_user.domain;
+                    dataRow[2] = local_user.ma_nd;
+
                     dtImport.Rows.Add(dataRow);
               
                     // Display MIME Message ID
