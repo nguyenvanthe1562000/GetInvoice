@@ -56,16 +56,57 @@ namespace GetInvoice
             this.status_Process = new System.Windows.Forms.ToolStripStatusLabel();
             this.gridDanhSachHoaDon = new DevExpress.XtraGrid.GridControl();
             this.grvDanhSachHoaDon = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridColumn39 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colNgay_CN = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.gridBangKeHoaDon = new DevExpress.XtraGrid.GridControl();
             this.grvBangKeHoaDon = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridColumn14 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn15 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn22 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn23 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn24 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn25 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn26 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn27 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn28 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn29 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn30 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn31 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn32 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn33 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn34 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn35 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn36 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn37 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn38 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.lblPathFile = new System.Windows.Forms.LinkLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupControl3 = new DevExpress.XtraEditors.GroupControl();
             this.gridHHDV = new DevExpress.XtraGrid.GridControl();
             this.grvHHDV = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.gridColumn16 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn17 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn18 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn19 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.gridColumn20 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.labelControl15 = new DevExpress.XtraEditors.LabelControl();
             this.txtSTK_NBan = new DevExpress.XtraEditors.TextEdit();
@@ -100,51 +141,11 @@ namespace GetInvoice
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.txtTen_NMua = new DevExpress.XtraEditors.TextEdit();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.gridColumn14 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn15 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn21 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn22 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn23 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn24 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn25 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn26 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn27 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn28 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn29 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn30 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn31 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn32 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn33 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn34 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn35 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn36 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn37 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn38 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn39 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn7 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn8 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn9 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn2 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn3 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.colNgay_CN = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn10 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn12 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
-            this.gridColumn16 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn13 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn17 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn18 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn19 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn11 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumn20 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridDanhSachHoaDon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSachHoaDon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridBangKeHoaDon)).BeginInit();
@@ -169,7 +170,6 @@ namespace GetInvoice
             ((System.ComponentModel.ISupportInitialize)(this.txtMST_NMua.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTen_Dvi_Mua.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTen_NMua.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -408,6 +408,144 @@ namespace GetInvoice
             this.grvDanhSachHoaDon.OptionsView.ShowGroupPanel = false;
             this.grvDanhSachHoaDon.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.grvDanhSachHoaDon_FocusedRowChanged);
             // 
+            // gridColumn39
+            // 
+            this.gridColumn39.Caption = "Posted";
+            this.gridColumn39.FieldName = "is_posted";
+            this.gridColumn39.MinWidth = 27;
+            this.gridColumn39.Name = "gridColumn39";
+            this.gridColumn39.Visible = true;
+            this.gridColumn39.VisibleIndex = 0;
+            this.gridColumn39.Width = 53;
+            // 
+            // gridColumn7
+            // 
+            this.gridColumn7.Caption = "Ngày hóa đơn";
+            this.gridColumn7.FieldName = "ngay_lap";
+            this.gridColumn7.MinWidth = 27;
+            this.gridColumn7.Name = "gridColumn7";
+            this.gridColumn7.Visible = true;
+            this.gridColumn7.VisibleIndex = 1;
+            this.gridColumn7.Width = 135;
+            // 
+            // gridColumn8
+            // 
+            this.gridColumn8.Caption = "Số hóa đơn";
+            this.gridColumn8.FieldName = "so_hd";
+            this.gridColumn8.MinWidth = 27;
+            this.gridColumn8.Name = "gridColumn8";
+            this.gridColumn8.Visible = true;
+            this.gridColumn8.VisibleIndex = 2;
+            this.gridColumn8.Width = 135;
+            // 
+            // gridColumn9
+            // 
+            this.gridColumn9.Caption = "Ký hiệu";
+            this.gridColumn9.FieldName = "ky_hieu_hd";
+            this.gridColumn9.MinWidth = 27;
+            this.gridColumn9.Name = "gridColumn9";
+            this.gridColumn9.Visible = true;
+            this.gridColumn9.VisibleIndex = 3;
+            this.gridColumn9.Width = 135;
+            // 
+            // gridColumn1
+            // 
+            this.gridColumn1.Caption = "Đơn vị bán hàng";
+            this.gridColumn1.FieldName = "ten_nban";
+            this.gridColumn1.MinWidth = 27;
+            this.gridColumn1.Name = "gridColumn1";
+            this.gridColumn1.Visible = true;
+            this.gridColumn1.VisibleIndex = 4;
+            this.gridColumn1.Width = 135;
+            // 
+            // gridColumn2
+            // 
+            this.gridColumn2.Caption = "MST";
+            this.gridColumn2.FieldName = "mst_nban";
+            this.gridColumn2.MinWidth = 27;
+            this.gridColumn2.Name = "gridColumn2";
+            this.gridColumn2.Visible = true;
+            this.gridColumn2.VisibleIndex = 5;
+            this.gridColumn2.Width = 135;
+            // 
+            // gridColumn3
+            // 
+            this.gridColumn3.Caption = "Địa chỉ";
+            this.gridColumn3.FieldName = "dia_chi_nban";
+            this.gridColumn3.MinWidth = 27;
+            this.gridColumn3.Name = "gridColumn3";
+            this.gridColumn3.Visible = true;
+            this.gridColumn3.VisibleIndex = 6;
+            this.gridColumn3.Width = 135;
+            // 
+            // gridColumn4
+            // 
+            this.gridColumn4.Caption = "Tiền hàng";
+            this.gridColumn4.FieldName = "thanh_tien";
+            this.gridColumn4.MinWidth = 27;
+            this.gridColumn4.Name = "gridColumn4";
+            this.gridColumn4.Visible = true;
+            this.gridColumn4.VisibleIndex = 7;
+            this.gridColumn4.Width = 135;
+            // 
+            // gridColumn5
+            // 
+            this.gridColumn5.Caption = "Tiền thuế GTGT";
+            this.gridColumn5.FieldName = "tien_thue";
+            this.gridColumn5.MinWidth = 27;
+            this.gridColumn5.Name = "gridColumn5";
+            this.gridColumn5.Visible = true;
+            this.gridColumn5.VisibleIndex = 8;
+            this.gridColumn5.Width = 135;
+            // 
+            // gridColumn6
+            // 
+            this.gridColumn6.Caption = "Tổng tiền thanh toán";
+            this.gridColumn6.FieldName = "tong_tien";
+            this.gridColumn6.MinWidth = 27;
+            this.gridColumn6.Name = "gridColumn6";
+            this.gridColumn6.Visible = true;
+            this.gridColumn6.VisibleIndex = 9;
+            this.gridColumn6.Width = 135;
+            // 
+            // colNgay_CN
+            // 
+            this.colNgay_CN.Caption = "Ngày lấy dữ liệu";
+            this.colNgay_CN.FieldName = "created_at";
+            this.colNgay_CN.MinWidth = 27;
+            this.colNgay_CN.Name = "colNgay_CN";
+            this.colNgay_CN.Visible = true;
+            this.colNgay_CN.VisibleIndex = 10;
+            this.colNgay_CN.Width = 135;
+            // 
+            // gridColumn10
+            // 
+            this.gridColumn10.Caption = "gridColumn10";
+            this.gridColumn10.FieldName = "id";
+            this.gridColumn10.MinWidth = 27;
+            this.gridColumn10.Name = "gridColumn10";
+            this.gridColumn10.Width = 100;
+            // 
+            // gridColumn12
+            // 
+            this.gridColumn12.Caption = "Người tạo";
+            this.gridColumn12.FieldName = "created_by";
+            this.gridColumn12.MinWidth = 27;
+            this.gridColumn12.Name = "gridColumn12";
+            this.gridColumn12.Visible = true;
+            this.gridColumn12.VisibleIndex = 11;
+            this.gridColumn12.Width = 144;
+            // 
+            // repositoryItemCheckEdit1
+            // 
+            this.repositoryItemCheckEdit1.AutoHeight = false;
+            this.repositoryItemCheckEdit1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.repositoryItemCheckEdit1.DisplayValueChecked = "1";
+            this.repositoryItemCheckEdit1.DisplayValueGrayed = "0";
+            this.repositoryItemCheckEdit1.DisplayValueUnchecked = "0";
+            this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
+            this.repositoryItemCheckEdit1.NullStyle = DevExpress.XtraEditors.Controls.StyleIndeterminate.Unchecked;
+            // 
             // gridView2
             // 
             this.gridView2.Name = "gridView2";
@@ -472,6 +610,204 @@ namespace GetInvoice
             this.grvBangKeHoaDon.OptionsBehavior.Editable = false;
             this.grvBangKeHoaDon.OptionsView.ShowGroupExpandCollapseButtons = false;
             this.grvBangKeHoaDon.OptionsView.ShowGroupPanel = false;
+            // 
+            // gridColumn14
+            // 
+            this.gridColumn14.Caption = "Ngày hóa đơn";
+            this.gridColumn14.FieldName = "ngay_lap";
+            this.gridColumn14.MinWidth = 27;
+            this.gridColumn14.Name = "gridColumn14";
+            this.gridColumn14.Visible = true;
+            this.gridColumn14.VisibleIndex = 0;
+            this.gridColumn14.Width = 100;
+            // 
+            // gridColumn15
+            // 
+            this.gridColumn15.Caption = "Số hóa đơn";
+            this.gridColumn15.FieldName = "so_hd";
+            this.gridColumn15.MinWidth = 27;
+            this.gridColumn15.Name = "gridColumn15";
+            this.gridColumn15.Visible = true;
+            this.gridColumn15.VisibleIndex = 1;
+            this.gridColumn15.Width = 100;
+            // 
+            // gridColumn21
+            // 
+            this.gridColumn21.Caption = "Ký hiệu";
+            this.gridColumn21.FieldName = "ky_hieu_hd";
+            this.gridColumn21.MinWidth = 27;
+            this.gridColumn21.Name = "gridColumn21";
+            this.gridColumn21.Visible = true;
+            this.gridColumn21.VisibleIndex = 2;
+            this.gridColumn21.Width = 100;
+            // 
+            // gridColumn22
+            // 
+            this.gridColumn22.Caption = "Đơn vị bán hàng";
+            this.gridColumn22.FieldName = "ten_nban";
+            this.gridColumn22.MinWidth = 27;
+            this.gridColumn22.Name = "gridColumn22";
+            this.gridColumn22.Visible = true;
+            this.gridColumn22.VisibleIndex = 3;
+            this.gridColumn22.Width = 100;
+            // 
+            // gridColumn23
+            // 
+            this.gridColumn23.Caption = "MST";
+            this.gridColumn23.FieldName = "mst_nban";
+            this.gridColumn23.MinWidth = 27;
+            this.gridColumn23.Name = "gridColumn23";
+            this.gridColumn23.Visible = true;
+            this.gridColumn23.VisibleIndex = 4;
+            this.gridColumn23.Width = 100;
+            // 
+            // gridColumn24
+            // 
+            this.gridColumn24.Caption = "Địa chỉ";
+            this.gridColumn24.FieldName = "dia_chi_nban";
+            this.gridColumn24.MinWidth = 27;
+            this.gridColumn24.Name = "gridColumn24";
+            this.gridColumn24.Visible = true;
+            this.gridColumn24.VisibleIndex = 5;
+            this.gridColumn24.Width = 100;
+            // 
+            // gridColumn25
+            // 
+            this.gridColumn25.Caption = "Tiền hàng";
+            this.gridColumn25.FieldName = "thanh_tien";
+            this.gridColumn25.MinWidth = 27;
+            this.gridColumn25.Name = "gridColumn25";
+            this.gridColumn25.Visible = true;
+            this.gridColumn25.VisibleIndex = 6;
+            this.gridColumn25.Width = 100;
+            // 
+            // gridColumn26
+            // 
+            this.gridColumn26.Caption = "Tiền thuế GTGT";
+            this.gridColumn26.FieldName = "tien_thue";
+            this.gridColumn26.MinWidth = 27;
+            this.gridColumn26.Name = "gridColumn26";
+            this.gridColumn26.Visible = true;
+            this.gridColumn26.VisibleIndex = 7;
+            this.gridColumn26.Width = 100;
+            // 
+            // gridColumn27
+            // 
+            this.gridColumn27.Caption = "Tổng tiền thanh toán";
+            this.gridColumn27.FieldName = "tong_tien";
+            this.gridColumn27.MinWidth = 27;
+            this.gridColumn27.Name = "gridColumn27";
+            this.gridColumn27.Visible = true;
+            this.gridColumn27.VisibleIndex = 8;
+            this.gridColumn27.Width = 100;
+            // 
+            // gridColumn28
+            // 
+            this.gridColumn28.Caption = "Ngày lấy dữ liệu";
+            this.gridColumn28.FieldName = "created_at";
+            this.gridColumn28.MinWidth = 27;
+            this.gridColumn28.Name = "gridColumn28";
+            this.gridColumn28.Visible = true;
+            this.gridColumn28.VisibleIndex = 9;
+            this.gridColumn28.Width = 100;
+            // 
+            // gridColumn29
+            // 
+            this.gridColumn29.Caption = "gridColumn10";
+            this.gridColumn29.FieldName = "id";
+            this.gridColumn29.MinWidth = 27;
+            this.gridColumn29.Name = "gridColumn29";
+            this.gridColumn29.Width = 100;
+            // 
+            // gridColumn30
+            // 
+            this.gridColumn30.Caption = "Người tạo";
+            this.gridColumn30.FieldName = "created_by";
+            this.gridColumn30.MinWidth = 27;
+            this.gridColumn30.Name = "gridColumn30";
+            this.gridColumn30.Visible = true;
+            this.gridColumn30.VisibleIndex = 10;
+            this.gridColumn30.Width = 100;
+            // 
+            // gridColumn31
+            // 
+            this.gridColumn31.Caption = "STT";
+            this.gridColumn31.FieldName = "stt";
+            this.gridColumn31.MinWidth = 27;
+            this.gridColumn31.Name = "gridColumn31";
+            this.gridColumn31.Visible = true;
+            this.gridColumn31.VisibleIndex = 11;
+            this.gridColumn31.Width = 100;
+            // 
+            // gridColumn32
+            // 
+            this.gridColumn32.Caption = "Mã HHDV";
+            this.gridColumn32.FieldName = "ma_hang";
+            this.gridColumn32.MinWidth = 27;
+            this.gridColumn32.Name = "gridColumn32";
+            this.gridColumn32.Visible = true;
+            this.gridColumn32.VisibleIndex = 12;
+            this.gridColumn32.Width = 100;
+            // 
+            // gridColumn33
+            // 
+            this.gridColumn33.Caption = "Tên HHDV";
+            this.gridColumn33.FieldName = "ten_hang";
+            this.gridColumn33.MinWidth = 27;
+            this.gridColumn33.Name = "gridColumn33";
+            this.gridColumn33.Visible = true;
+            this.gridColumn33.VisibleIndex = 13;
+            this.gridColumn33.Width = 100;
+            // 
+            // gridColumn34
+            // 
+            this.gridColumn34.Caption = "ĐVT";
+            this.gridColumn34.FieldName = "dvt";
+            this.gridColumn34.MinWidth = 27;
+            this.gridColumn34.Name = "gridColumn34";
+            this.gridColumn34.Visible = true;
+            this.gridColumn34.VisibleIndex = 14;
+            this.gridColumn34.Width = 100;
+            // 
+            // gridColumn35
+            // 
+            this.gridColumn35.Caption = "Số lượng";
+            this.gridColumn35.FieldName = "so_luong";
+            this.gridColumn35.MinWidth = 27;
+            this.gridColumn35.Name = "gridColumn35";
+            this.gridColumn35.Visible = true;
+            this.gridColumn35.VisibleIndex = 15;
+            this.gridColumn35.Width = 100;
+            // 
+            // gridColumn36
+            // 
+            this.gridColumn36.Caption = "Đơn giá";
+            this.gridColumn36.FieldName = "don_gia";
+            this.gridColumn36.MinWidth = 27;
+            this.gridColumn36.Name = "gridColumn36";
+            this.gridColumn36.Visible = true;
+            this.gridColumn36.VisibleIndex = 16;
+            this.gridColumn36.Width = 100;
+            // 
+            // gridColumn37
+            // 
+            this.gridColumn37.Caption = "Thành tiền";
+            this.gridColumn37.FieldName = "thanh_tien";
+            this.gridColumn37.MinWidth = 27;
+            this.gridColumn37.Name = "gridColumn37";
+            this.gridColumn37.Visible = true;
+            this.gridColumn37.VisibleIndex = 17;
+            this.gridColumn37.Width = 100;
+            // 
+            // gridColumn38
+            // 
+            this.gridColumn38.Caption = "Thuế GTGT";
+            this.gridColumn38.FieldName = "thue_vat";
+            this.gridColumn38.MinWidth = 27;
+            this.gridColumn38.Name = "gridColumn38";
+            this.gridColumn38.Visible = true;
+            this.gridColumn38.VisibleIndex = 18;
+            this.gridColumn38.Width = 100;
             // 
             // label1
             // 
@@ -551,6 +887,76 @@ namespace GetInvoice
             this.grvHHDV.OptionsBehavior.Editable = false;
             this.grvHHDV.OptionsView.ShowGroupExpandCollapseButtons = false;
             this.grvHHDV.OptionsView.ShowGroupPanel = false;
+            // 
+            // gridColumn16
+            // 
+            this.gridColumn16.Caption = "STT";
+            this.gridColumn16.FieldName = "stt";
+            this.gridColumn16.MinWidth = 27;
+            this.gridColumn16.Name = "gridColumn16";
+            this.gridColumn16.Visible = true;
+            this.gridColumn16.VisibleIndex = 0;
+            this.gridColumn16.Width = 100;
+            // 
+            // gridColumn13
+            // 
+            this.gridColumn13.Caption = "Mã hàng";
+            this.gridColumn13.FieldName = "ma_hang";
+            this.gridColumn13.MinWidth = 27;
+            this.gridColumn13.Name = "gridColumn13";
+            this.gridColumn13.Visible = true;
+            this.gridColumn13.VisibleIndex = 1;
+            this.gridColumn13.Width = 100;
+            // 
+            // gridColumn17
+            // 
+            this.gridColumn17.Caption = "Tên hàng hóa, dịch vụ";
+            this.gridColumn17.FieldName = "ten_hang";
+            this.gridColumn17.MinWidth = 27;
+            this.gridColumn17.Name = "gridColumn17";
+            this.gridColumn17.Visible = true;
+            this.gridColumn17.VisibleIndex = 2;
+            this.gridColumn17.Width = 100;
+            // 
+            // gridColumn18
+            // 
+            this.gridColumn18.Caption = "Đơn vị tính";
+            this.gridColumn18.FieldName = "dvt";
+            this.gridColumn18.MinWidth = 27;
+            this.gridColumn18.Name = "gridColumn18";
+            this.gridColumn18.Visible = true;
+            this.gridColumn18.VisibleIndex = 3;
+            this.gridColumn18.Width = 100;
+            // 
+            // gridColumn19
+            // 
+            this.gridColumn19.Caption = "Số lượng";
+            this.gridColumn19.FieldName = "so_luong";
+            this.gridColumn19.MinWidth = 27;
+            this.gridColumn19.Name = "gridColumn19";
+            this.gridColumn19.Visible = true;
+            this.gridColumn19.VisibleIndex = 4;
+            this.gridColumn19.Width = 100;
+            // 
+            // gridColumn11
+            // 
+            this.gridColumn11.Caption = "Đơn giá";
+            this.gridColumn11.FieldName = "don_gia";
+            this.gridColumn11.MinWidth = 27;
+            this.gridColumn11.Name = "gridColumn11";
+            this.gridColumn11.Visible = true;
+            this.gridColumn11.VisibleIndex = 5;
+            this.gridColumn11.Width = 100;
+            // 
+            // gridColumn20
+            // 
+            this.gridColumn20.Caption = "Thành tiền";
+            this.gridColumn20.FieldName = "thanh_tien";
+            this.gridColumn20.MinWidth = 27;
+            this.gridColumn20.Name = "gridColumn20";
+            this.gridColumn20.Visible = true;
+            this.gridColumn20.VisibleIndex = 6;
+            this.gridColumn20.Width = 100;
             // 
             // groupControl1
             // 
@@ -1008,412 +1414,6 @@ namespace GetInvoice
             this.timer1.Interval = 1;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // gridColumn14
-            // 
-            this.gridColumn14.Caption = "Ngày hóa đơn";
-            this.gridColumn14.FieldName = "ngay_lap";
-            this.gridColumn14.MinWidth = 27;
-            this.gridColumn14.Name = "gridColumn14";
-            this.gridColumn14.Visible = true;
-            this.gridColumn14.VisibleIndex = 0;
-            this.gridColumn14.Width = 100;
-            // 
-            // gridColumn15
-            // 
-            this.gridColumn15.Caption = "Số hóa đơn";
-            this.gridColumn15.FieldName = "so_hd";
-            this.gridColumn15.MinWidth = 27;
-            this.gridColumn15.Name = "gridColumn15";
-            this.gridColumn15.Visible = true;
-            this.gridColumn15.VisibleIndex = 1;
-            this.gridColumn15.Width = 100;
-            // 
-            // gridColumn21
-            // 
-            this.gridColumn21.Caption = "Ký hiệu";
-            this.gridColumn21.FieldName = "ky_hieu_hd";
-            this.gridColumn21.MinWidth = 27;
-            this.gridColumn21.Name = "gridColumn21";
-            this.gridColumn21.Visible = true;
-            this.gridColumn21.VisibleIndex = 2;
-            this.gridColumn21.Width = 100;
-            // 
-            // gridColumn22
-            // 
-            this.gridColumn22.Caption = "Đơn vị bán hàng";
-            this.gridColumn22.FieldName = "ten_nban";
-            this.gridColumn22.MinWidth = 27;
-            this.gridColumn22.Name = "gridColumn22";
-            this.gridColumn22.Visible = true;
-            this.gridColumn22.VisibleIndex = 3;
-            this.gridColumn22.Width = 100;
-            // 
-            // gridColumn23
-            // 
-            this.gridColumn23.Caption = "MST";
-            this.gridColumn23.FieldName = "mst_nban";
-            this.gridColumn23.MinWidth = 27;
-            this.gridColumn23.Name = "gridColumn23";
-            this.gridColumn23.Visible = true;
-            this.gridColumn23.VisibleIndex = 4;
-            this.gridColumn23.Width = 100;
-            // 
-            // gridColumn24
-            // 
-            this.gridColumn24.Caption = "Địa chỉ";
-            this.gridColumn24.FieldName = "dia_chi_nban";
-            this.gridColumn24.MinWidth = 27;
-            this.gridColumn24.Name = "gridColumn24";
-            this.gridColumn24.Visible = true;
-            this.gridColumn24.VisibleIndex = 5;
-            this.gridColumn24.Width = 100;
-            // 
-            // gridColumn25
-            // 
-            this.gridColumn25.Caption = "Tiền hàng";
-            this.gridColumn25.FieldName = "thanh_tien";
-            this.gridColumn25.MinWidth = 27;
-            this.gridColumn25.Name = "gridColumn25";
-            this.gridColumn25.Visible = true;
-            this.gridColumn25.VisibleIndex = 6;
-            this.gridColumn25.Width = 100;
-            // 
-            // gridColumn26
-            // 
-            this.gridColumn26.Caption = "Tiền thuế GTGT";
-            this.gridColumn26.FieldName = "tien_thue";
-            this.gridColumn26.MinWidth = 27;
-            this.gridColumn26.Name = "gridColumn26";
-            this.gridColumn26.Visible = true;
-            this.gridColumn26.VisibleIndex = 7;
-            this.gridColumn26.Width = 100;
-            // 
-            // gridColumn27
-            // 
-            this.gridColumn27.Caption = "Tổng tiền thanh toán";
-            this.gridColumn27.FieldName = "tong_tien";
-            this.gridColumn27.MinWidth = 27;
-            this.gridColumn27.Name = "gridColumn27";
-            this.gridColumn27.Visible = true;
-            this.gridColumn27.VisibleIndex = 8;
-            this.gridColumn27.Width = 100;
-            // 
-            // gridColumn28
-            // 
-            this.gridColumn28.Caption = "Ngày lấy dữ liệu";
-            this.gridColumn28.FieldName = "created_at";
-            this.gridColumn28.MinWidth = 27;
-            this.gridColumn28.Name = "gridColumn28";
-            this.gridColumn28.Visible = true;
-            this.gridColumn28.VisibleIndex = 9;
-            this.gridColumn28.Width = 100;
-            // 
-            // gridColumn29
-            // 
-            this.gridColumn29.Caption = "gridColumn10";
-            this.gridColumn29.FieldName = "id";
-            this.gridColumn29.MinWidth = 27;
-            this.gridColumn29.Name = "gridColumn29";
-            this.gridColumn29.Width = 100;
-            // 
-            // gridColumn30
-            // 
-            this.gridColumn30.Caption = "Người tạo";
-            this.gridColumn30.FieldName = "created_by";
-            this.gridColumn30.MinWidth = 27;
-            this.gridColumn30.Name = "gridColumn30";
-            this.gridColumn30.Visible = true;
-            this.gridColumn30.VisibleIndex = 10;
-            this.gridColumn30.Width = 100;
-            // 
-            // gridColumn31
-            // 
-            this.gridColumn31.Caption = "STT";
-            this.gridColumn31.FieldName = "stt";
-            this.gridColumn31.MinWidth = 27;
-            this.gridColumn31.Name = "gridColumn31";
-            this.gridColumn31.Visible = true;
-            this.gridColumn31.VisibleIndex = 11;
-            this.gridColumn31.Width = 100;
-            // 
-            // gridColumn32
-            // 
-            this.gridColumn32.Caption = "Mã HHDV";
-            this.gridColumn32.FieldName = "ma_hang";
-            this.gridColumn32.MinWidth = 27;
-            this.gridColumn32.Name = "gridColumn32";
-            this.gridColumn32.Visible = true;
-            this.gridColumn32.VisibleIndex = 12;
-            this.gridColumn32.Width = 100;
-            // 
-            // gridColumn33
-            // 
-            this.gridColumn33.Caption = "Tên HHDV";
-            this.gridColumn33.FieldName = "ten_hang";
-            this.gridColumn33.MinWidth = 27;
-            this.gridColumn33.Name = "gridColumn33";
-            this.gridColumn33.Visible = true;
-            this.gridColumn33.VisibleIndex = 13;
-            this.gridColumn33.Width = 100;
-            // 
-            // gridColumn34
-            // 
-            this.gridColumn34.Caption = "ĐVT";
-            this.gridColumn34.FieldName = "dvt";
-            this.gridColumn34.MinWidth = 27;
-            this.gridColumn34.Name = "gridColumn34";
-            this.gridColumn34.Visible = true;
-            this.gridColumn34.VisibleIndex = 14;
-            this.gridColumn34.Width = 100;
-            // 
-            // gridColumn35
-            // 
-            this.gridColumn35.Caption = "Số lượng";
-            this.gridColumn35.FieldName = "so_luong";
-            this.gridColumn35.MinWidth = 27;
-            this.gridColumn35.Name = "gridColumn35";
-            this.gridColumn35.Visible = true;
-            this.gridColumn35.VisibleIndex = 15;
-            this.gridColumn35.Width = 100;
-            // 
-            // gridColumn36
-            // 
-            this.gridColumn36.Caption = "Đơn giá";
-            this.gridColumn36.FieldName = "don_gia";
-            this.gridColumn36.MinWidth = 27;
-            this.gridColumn36.Name = "gridColumn36";
-            this.gridColumn36.Visible = true;
-            this.gridColumn36.VisibleIndex = 16;
-            this.gridColumn36.Width = 100;
-            // 
-            // gridColumn37
-            // 
-            this.gridColumn37.Caption = "Thành tiền";
-            this.gridColumn37.FieldName = "thanh_tien";
-            this.gridColumn37.MinWidth = 27;
-            this.gridColumn37.Name = "gridColumn37";
-            this.gridColumn37.Visible = true;
-            this.gridColumn37.VisibleIndex = 17;
-            this.gridColumn37.Width = 100;
-            // 
-            // gridColumn38
-            // 
-            this.gridColumn38.Caption = "Thuế GTGT";
-            this.gridColumn38.FieldName = "thue_vat";
-            this.gridColumn38.MinWidth = 27;
-            this.gridColumn38.Name = "gridColumn38";
-            this.gridColumn38.Visible = true;
-            this.gridColumn38.VisibleIndex = 18;
-            this.gridColumn38.Width = 100;
-            // 
-            // gridColumn39
-            // 
-            this.gridColumn39.Caption = "Posted";
-            this.gridColumn39.FieldName = "is_posted";
-            this.gridColumn39.MinWidth = 27;
-            this.gridColumn39.Name = "gridColumn39";
-            this.gridColumn39.Visible = true;
-            this.gridColumn39.VisibleIndex = 0;
-            this.gridColumn39.Width = 53;
-            // 
-            // gridColumn7
-            // 
-            this.gridColumn7.Caption = "Ngày hóa đơn";
-            this.gridColumn7.FieldName = "ngay_lap";
-            this.gridColumn7.MinWidth = 27;
-            this.gridColumn7.Name = "gridColumn7";
-            this.gridColumn7.Visible = true;
-            this.gridColumn7.VisibleIndex = 1;
-            this.gridColumn7.Width = 135;
-            // 
-            // gridColumn8
-            // 
-            this.gridColumn8.Caption = "Số hóa đơn";
-            this.gridColumn8.FieldName = "so_hd";
-            this.gridColumn8.MinWidth = 27;
-            this.gridColumn8.Name = "gridColumn8";
-            this.gridColumn8.Visible = true;
-            this.gridColumn8.VisibleIndex = 2;
-            this.gridColumn8.Width = 135;
-            // 
-            // gridColumn9
-            // 
-            this.gridColumn9.Caption = "Ký hiệu";
-            this.gridColumn9.FieldName = "ky_hieu_hd";
-            this.gridColumn9.MinWidth = 27;
-            this.gridColumn9.Name = "gridColumn9";
-            this.gridColumn9.Visible = true;
-            this.gridColumn9.VisibleIndex = 3;
-            this.gridColumn9.Width = 135;
-            // 
-            // gridColumn1
-            // 
-            this.gridColumn1.Caption = "Đơn vị bán hàng";
-            this.gridColumn1.FieldName = "ten_nban";
-            this.gridColumn1.MinWidth = 27;
-            this.gridColumn1.Name = "gridColumn1";
-            this.gridColumn1.Visible = true;
-            this.gridColumn1.VisibleIndex = 4;
-            this.gridColumn1.Width = 135;
-            // 
-            // gridColumn2
-            // 
-            this.gridColumn2.Caption = "MST";
-            this.gridColumn2.FieldName = "mst_nban";
-            this.gridColumn2.MinWidth = 27;
-            this.gridColumn2.Name = "gridColumn2";
-            this.gridColumn2.Visible = true;
-            this.gridColumn2.VisibleIndex = 5;
-            this.gridColumn2.Width = 135;
-            // 
-            // gridColumn3
-            // 
-            this.gridColumn3.Caption = "Địa chỉ";
-            this.gridColumn3.FieldName = "dia_chi_nban";
-            this.gridColumn3.MinWidth = 27;
-            this.gridColumn3.Name = "gridColumn3";
-            this.gridColumn3.Visible = true;
-            this.gridColumn3.VisibleIndex = 6;
-            this.gridColumn3.Width = 135;
-            // 
-            // gridColumn4
-            // 
-            this.gridColumn4.Caption = "Tiền hàng";
-            this.gridColumn4.FieldName = "thanh_tien";
-            this.gridColumn4.MinWidth = 27;
-            this.gridColumn4.Name = "gridColumn4";
-            this.gridColumn4.Visible = true;
-            this.gridColumn4.VisibleIndex = 7;
-            this.gridColumn4.Width = 135;
-            // 
-            // gridColumn5
-            // 
-            this.gridColumn5.Caption = "Tiền thuế GTGT";
-            this.gridColumn5.FieldName = "tien_thue";
-            this.gridColumn5.MinWidth = 27;
-            this.gridColumn5.Name = "gridColumn5";
-            this.gridColumn5.Visible = true;
-            this.gridColumn5.VisibleIndex = 8;
-            this.gridColumn5.Width = 135;
-            // 
-            // gridColumn6
-            // 
-            this.gridColumn6.Caption = "Tổng tiền thanh toán";
-            this.gridColumn6.FieldName = "tong_tien";
-            this.gridColumn6.MinWidth = 27;
-            this.gridColumn6.Name = "gridColumn6";
-            this.gridColumn6.Visible = true;
-            this.gridColumn6.VisibleIndex = 9;
-            this.gridColumn6.Width = 135;
-            // 
-            // colNgay_CN
-            // 
-            this.colNgay_CN.Caption = "Ngày lấy dữ liệu";
-            this.colNgay_CN.FieldName = "created_at";
-            this.colNgay_CN.MinWidth = 27;
-            this.colNgay_CN.Name = "colNgay_CN";
-            this.colNgay_CN.Visible = true;
-            this.colNgay_CN.VisibleIndex = 10;
-            this.colNgay_CN.Width = 135;
-            // 
-            // gridColumn10
-            // 
-            this.gridColumn10.Caption = "gridColumn10";
-            this.gridColumn10.FieldName = "id";
-            this.gridColumn10.MinWidth = 27;
-            this.gridColumn10.Name = "gridColumn10";
-            this.gridColumn10.Width = 100;
-            // 
-            // gridColumn12
-            // 
-            this.gridColumn12.Caption = "Người tạo";
-            this.gridColumn12.FieldName = "created_by";
-            this.gridColumn12.MinWidth = 27;
-            this.gridColumn12.Name = "gridColumn12";
-            this.gridColumn12.Visible = true;
-            this.gridColumn12.VisibleIndex = 11;
-            this.gridColumn12.Width = 144;
-            // 
-            // repositoryItemCheckEdit1
-            // 
-            this.repositoryItemCheckEdit1.AutoHeight = false;
-            this.repositoryItemCheckEdit1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.repositoryItemCheckEdit1.DisplayValueChecked = "1";
-            this.repositoryItemCheckEdit1.DisplayValueGrayed = "0";
-            this.repositoryItemCheckEdit1.DisplayValueUnchecked = "0";
-            this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
-            this.repositoryItemCheckEdit1.NullStyle = DevExpress.XtraEditors.Controls.StyleIndeterminate.Unchecked;
-            // 
-            // gridColumn16
-            // 
-            this.gridColumn16.Caption = "STT";
-            this.gridColumn16.FieldName = "stt";
-            this.gridColumn16.MinWidth = 27;
-            this.gridColumn16.Name = "gridColumn16";
-            this.gridColumn16.Visible = true;
-            this.gridColumn16.VisibleIndex = 0;
-            this.gridColumn16.Width = 100;
-            // 
-            // gridColumn13
-            // 
-            this.gridColumn13.Caption = "Mã hàng";
-            this.gridColumn13.FieldName = "ma_hang";
-            this.gridColumn13.MinWidth = 27;
-            this.gridColumn13.Name = "gridColumn13";
-            this.gridColumn13.Visible = true;
-            this.gridColumn13.VisibleIndex = 1;
-            this.gridColumn13.Width = 100;
-            // 
-            // gridColumn17
-            // 
-            this.gridColumn17.Caption = "Tên hàng hóa, dịch vụ";
-            this.gridColumn17.FieldName = "ten_hang";
-            this.gridColumn17.MinWidth = 27;
-            this.gridColumn17.Name = "gridColumn17";
-            this.gridColumn17.Visible = true;
-            this.gridColumn17.VisibleIndex = 2;
-            this.gridColumn17.Width = 100;
-            // 
-            // gridColumn18
-            // 
-            this.gridColumn18.Caption = "Đơn vị tính";
-            this.gridColumn18.FieldName = "dvt";
-            this.gridColumn18.MinWidth = 27;
-            this.gridColumn18.Name = "gridColumn18";
-            this.gridColumn18.Visible = true;
-            this.gridColumn18.VisibleIndex = 3;
-            this.gridColumn18.Width = 100;
-            // 
-            // gridColumn19
-            // 
-            this.gridColumn19.Caption = "Số lượng";
-            this.gridColumn19.FieldName = "so_luong";
-            this.gridColumn19.MinWidth = 27;
-            this.gridColumn19.Name = "gridColumn19";
-            this.gridColumn19.Visible = true;
-            this.gridColumn19.VisibleIndex = 4;
-            this.gridColumn19.Width = 100;
-            // 
-            // gridColumn11
-            // 
-            this.gridColumn11.Caption = "Đơn giá";
-            this.gridColumn11.FieldName = "don_gia";
-            this.gridColumn11.MinWidth = 27;
-            this.gridColumn11.Name = "gridColumn11";
-            this.gridColumn11.Visible = true;
-            this.gridColumn11.VisibleIndex = 5;
-            this.gridColumn11.Width = 100;
-            // 
-            // gridColumn20
-            // 
-            this.gridColumn20.Caption = "Thành tiền";
-            this.gridColumn20.FieldName = "thanh_tien";
-            this.gridColumn20.MinWidth = 27;
-            this.gridColumn20.Name = "gridColumn20";
-            this.gridColumn20.Visible = true;
-            this.gridColumn20.VisibleIndex = 6;
-            this.gridColumn20.Width = 100;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1436,6 +1436,7 @@ namespace GetInvoice
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridDanhSachHoaDon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.grvDanhSachHoaDon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridBangKeHoaDon)).EndInit();
@@ -1460,7 +1461,6 @@ namespace GetInvoice
             ((System.ComponentModel.ISupportInitialize)(this.txtMST_NMua.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTen_Dvi_Mua.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtTen_NMua.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -1,6 +1,7 @@
 ﻿using DevExpress.XtraGrid.Columns;
 using GetInvoice.Gmail;
 using GetInvoice.Model;
+using GmailAPI.APIHelper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -56,7 +57,7 @@ namespace GetInvoice
             local_user = user_info;
             lblPathFile.Visible = true;
             lblPathFile.Text = user_info.path_load_file == "" ? "" : user_info.path_load_file;
-          
+
             ///
             var s3 = Application.StartupPath;
             String FilePath = Path.Combine(s3, "SETUPGMAIL.txt");
@@ -76,21 +77,23 @@ namespace GetInvoice
 
         private async void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-     
+
             try
             {
-                var checkVerify = CheckSetUpUserVerify();
-                if (!checkVerify)
-                {
 
-                    return;
-                }
+
 
                 while (!string.IsNullOrEmpty(local_user.domain) || !string.IsNullOrEmpty(_HDDTRequest.Token))
                 {
-                    // Run your task here
-                    await AutoReadGmail();
-
+                    if (!CheckSetUpUserVerify())
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        // Run your task here
+                        await AutoReadGmail();
+                    }
                     // Delay for the specified sleep duration
                     await Task.Delay(TimeSpan.FromMinutes(Program.setupGmail.Timer));
                 }
@@ -110,7 +113,7 @@ namespace GetInvoice
 
         private async Task AutoReadGmail()
         {
-         
+
             int RowMail = 0;
             var Gov = new HDDTReponseMessage();
             Gov.Messagesfailed = new List<string>();
@@ -151,11 +154,11 @@ namespace GetInvoice
             {
                 AddStatus(Gov.Messagesfailed);
             }
-  
+
         }
         void AddStatus(List<string> messages)
         {
-             
+
             statusDropdown_StatusProgram_2.DropDownItems.Clear();
             if (messages != null)
             {
@@ -180,9 +183,9 @@ namespace GetInvoice
                 tslblUserName.Text = FULLNAME + " (" + USERNAME + ")";
                 tslblDataSource.Text = "Data source: " + _DATABASE_STRING;
                 tslblDatabase.Text = "Database name: " + _DATABASE_NAME;
-        
+
                 LoadGrid(USERNAME);
-              
+
             }
             catch (Exception ex)
             {
@@ -198,9 +201,11 @@ namespace GetInvoice
         {
             try
             {
+                
                 bool _is_exists_file = true;
                 //string _upload_path = System.Configuration.ConfigurationManager.AppSettings["Upload_Path"];
                 string _upload_path = local_user.path_load_file;
+                List<string> _Message = new List<string>();
                 if (_upload_path == "")
                 {
                     Message_Box_Error("(Chưa thiết lập) Bạn chưa thiết lập thư mục chứa file xml");
@@ -210,8 +215,10 @@ namespace GetInvoice
 
                 FileInfo[] Files = d.GetFiles("*.xml"); //Getting Text files
                 string _msg = "";
+                int hdSuccess = 0;
                 //Xu ly last imported
                 ExeSQLNonQuery(string.Format("update f_hoadon set last_imported = 0 where created_by = '{0}'", USERNAME));
+
                 foreach (FileInfo file in Files)
                 {
                     if (file.Name.StartsWith("sync_"))
@@ -224,36 +231,29 @@ namespace GetInvoice
                         _is_exists_file = false;
                         if (_msg != "ok")
                         {
-                            DialogResult result = MessageBox.Show(file.Name + Environment.NewLine + "Lỗi: " + _msg + Environment.NewLine + "Bạn có muốn tiếp tục tiến trình ?", "Lỗi", MessageBoxButtons.YesNo);
-                            if (result == DialogResult.Yes)
-                            {
-                                File.Move(string.Format(@"{0}/{1}", _upload_path, file.Name), string.Format(@"{0}{1}", System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_FAILED\", file.Name));
-                            }
-                            else if (result == DialogResult.No)
-                            {
-                                File.Move(string.Format(@"{0}/{1}", _upload_path, file.Name), string.Format(@"{0}{1}", System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_FAILED\", file.Name));
-                                break;
-                            }
+                            var failed = System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_FAILED\"+file.Name;
+                            _Message.Add(file.Name + Environment.NewLine + "Lỗi: " + _msg + Environment.NewLine);
+                            if (File.Exists(failed))
+                            { File.Delete(failed); }
+                            File.Move(string.Format(@"{0}/{1}", _upload_path, file.Name), string.Format(@"{0}{1}", System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_FAILED\", file.Name));
                         }
                         else
                         {
+                            var success = System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_SUCCESSFULLY\" + file.Name;
+                            if (File.Exists(success))
+                            { File.Delete(success); }
                             File.Move(string.Format(@"{0}/{1}", _upload_path, file.Name), string.Format(@"{0}{1}", System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_SUCCESSFULLY\", file.Name));
+                            hdSuccess++;
                         }
                     }
                 }
-                if (_is_exists_file)
-                {
-                    Message_Box_Error("Các file xml trong thư mục đã được đồng bộ hết");
-                    return;
-                }
-                if (_msg == "ok")
-                {
-                    Message_Box("Đã thêm dữ liệu thành công");
-                    Load_LastImport(USERNAME);
-                }
+                Message_Box("Các file xml trong thư mục đã được đồng bộ hết: " + $"{hdSuccess}/{Files.Length}");
+                Load_LastImport(USERNAME);
             }
             catch (Exception ex)
             {
+                endProcess();
+
                 _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
                 frmErr.ShowDialog();
@@ -402,18 +402,13 @@ namespace GetInvoice
 
                 if (ex.Message.Contains("Cannot insert duplicate key in object 'dbo.f_hoadon'"))
                 {
-
-                    _logger.Log(LogType.Error, "Hóa đơn tồn tại trong cơ sở dữ liệu", new StackTrace(ex, true).GetFrames().Last());
-                    frmErr frmErr = new frmErr(LogType.Error, this.Text, "Hóa đơn tồn tại trong cơ sở dữ liệu", new StackTrace(ex, true).GetFrames().Last());
-                    frmErr.ShowDialog();
+                    return $"Hóa đơn tồn tại trong cơ sở dữ liệu\n{ex.Message}";
 
                 }
                 else
                 {
+                    return $"{ex.Message}";
                     _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
-                    frmErr frmErr = new frmErr(LogType.Error, this.Text, ex.Message, new StackTrace(ex, true).GetFrames().Last());
-                    frmErr.ShowDialog();
-
                 }
                 return "";
             }
@@ -604,7 +599,7 @@ namespace GetInvoice
         private void tsbtnTest_Click(object sender, EventArgs e)
         {
             string parent = System.IO.Directory.GetParent(lblPathFile.Text).FullName;
-            MessageBox.Show(parent);
+            Message_Box(parent);
         }
 
         private void lblPathFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -629,7 +624,7 @@ namespace GetInvoice
         {
             startProcess();
             Load_LastImport(USERNAME);
-            endProcess();   
+            endProcess();
         }
 
         private void Load_LastImport(string _ma_nd)
@@ -671,47 +666,56 @@ namespace GetInvoice
         }
         private async void tsbtnDownloadMail_Click(object sender, EventArgs e)
         {
+
+            if (!CheckSetUpUserVerify())
+            {
+                return;
+            }
             startProcess();
             try
             {
-
-                MessageBox.Show("Vui lòng chờ trong giây lát");
-                var resutl = await Task.Run(async () =>
+                var resutl = new List<GmailModel>();
+                Message_Box("Vui lòng chờ trong giây lát");
+                if (setupGmail.MailDownload)
                 {
-                    if (!(string.IsNullOrEmpty(local_user.domain)))
+                    resutl = await Task.Run(async () =>
                     {
-                        IMapGmail mapGmail = new IMapGmail(local_user);
-                        var result = await mapGmail.Start();
-                        return result;
-                    }
-                    else
-                    {
-                        GoogleGmail gmail = new GoogleGmail(local_user);
+                        if (!(string.IsNullOrEmpty(local_user.domain)))
+                        {
+                            IMapGmail mapGmail = new IMapGmail(local_user);
+                            var result = await mapGmail.Start();
+                            return result;
+                        }
+                        else
+                        {
+                            GoogleGmail gmail = new GoogleGmail(local_user);
 
-                        return await gmail.Star();
+                            return await gmail.Star();
 
-                    }
+                        }
 
-                });
+                    });
+                }
+
                 var Gov = new HDDTReponseMessage();
-                if (_HDDTRequest.Token != null)
+                if (setupGmail.GOVDownload)
                 {
-                    HDDT_GOV gov = new HDDT_GOV(local_user);
-                    Gov = await gov.Start();
+                    if (_HDDTRequest.Token != null)
+                    {
+                        HDDT_GOV gov = new HDDT_GOV(local_user);
+                        Gov = await gov.Start();
+                    }
 
                 }
+
                 endProcess();
 
-                if ((resutl is null) && Gov.Success == false)
+                if (!(resutl is null) || Gov.Success)
                 {
-                    MessageBox.Show("không có mail nào đc đọc");
-                }
-                else
-                {
-                    MessageBox.Show($"có tổng số {resutl.Count} mail hóa đơn, có {Gov.Message} từ cổng HDDT GOV");
+                    Message_Box($"có tổng số {resutl.Count} mail hóa đơn, có {Gov.Message} từ cổng HDDT GOV");
                     this.tslbl_Status.Text = $"Có {resutl.Count}-Gmail,{Gov.Message}-GOV HĐ được tải |";
+                    AddStatus(Gov.Messagesfailed);
                 }
-                AddStatus(Gov.Messagesfailed);
             }
             catch (Exception ex)
             {
@@ -747,10 +751,14 @@ namespace GetInvoice
             bool check = true;
             string mess = "";
             statusDropdown_StatusProgram_2.Image = null;
-            if (File.Exists(local_user.path_load_file))
+            if (!Directory.Exists(local_user.path_load_file))
             {
                 check = false;
-                mess = "" + "\n\r đường dẫn load file XML không tồn tại vui lòng setup lại";
+                mess += "\n\r đường dẫn load file XML không tồn tại vui lòng setup lại";
+            }
+            if (!check)
+            {
+                Message_Box(mess);
             }
             return check;
         }
@@ -777,16 +785,16 @@ namespace GetInvoice
         }
         void startProcess()
         {
-            stopwatch=new Stopwatch();
+            stopwatch = new Stopwatch();
             stopwatch.Start();
             timer1.Enabled = true;
-            
+
         }
         void endProcess()
         {
             timer1.Enabled = false;
             stopwatch.Stop();
-         
+
         }
     }
 }
