@@ -27,7 +27,7 @@ namespace GetInvoice.Gmail
         SetupGmailModel setupGmail;
         UserInfo _user;
 
-        public HDDT_GOV(UserInfo user =null)
+        public HDDT_GOV(UserInfo user = null)
         {
             setupGmail = Program.setupGmail;
             if (setupGmail.PathPDF is null)
@@ -118,7 +118,7 @@ namespace GetInvoice.Gmail
 
                 var json = JsonConvert.SerializeObject(authenticate);
                 var content = new System.Net.Http.StringContent(json, Encoding.UTF8, "application/json");
-             httpClient.Timeout=   TimeSpan.FromSeconds(10);
+                httpClient.Timeout = TimeSpan.FromSeconds(10);
                 var response = await httpClient.PostAsync(this.url + @"/security-taxpayer/authenticate", content);
                 if (response.IsSuccessStatusCode)
                 {
@@ -147,26 +147,38 @@ namespace GetInvoice.Gmail
             reponseMessage.Success = true;
             reponseMessage.Messagesfailed = new List<string>();
             var purchase = new HDDTPurchase();
+            List<int> _Type_ttxly = new List<int> { 5, 6, 8 };//Kết quả kiểm tra (loại hóa đơn đã cấp mã,chưa cấp mã)
             try
             {
-              
                 do
                 {
-                    purchase = await GetHDDT(purchase.State);
+
+
+                    purchase = await GetHDDT(purchase.State, _Type_ttxly[0]);
                     if (purchase == null)
+                    {
+                        listPurchase = new List<HDDTPurchase>();
+                        _Type_ttxly.Remove(_Type_ttxly[0]);
+                    }
+                    else if (purchase.State == null && _Type_ttxly.Count > 0)
+                    {
+                        _Type_ttxly.Remove(_Type_ttxly[0]);
+                    }
+                    else if (purchase.State == null && _Type_ttxly.Count == 0)
                     {
                         break;
                     }
-                    else
+                    if (purchase != null)
                     {
+
                         listPurchase.Add(purchase);
                     }
-                } while (purchase.State != null);
+                } while (purchase.State != null || _Type_ttxly.Count > 0);
                 if (listPurchase != null)
                 {
                     DataTable dtLastImport = utilities.ExeSQL($"select IdEmail, Domain " +
                         $" from f_LogGmail" +
-                        $" where Domain = 'HDDTGOV'" + $" AND created_by='{_user.ma_nd}' "+
+                        $" where Domain = 'HDDTGOV'" + $" AND created_by='{_user.ma_nd}' " +
                         $" group by IdEmail,Domain");
 
                     DataTable dtImport = new DataTable();
@@ -178,7 +190,7 @@ namespace GetInvoice.Gmail
                     List<HDDTPurchaseDetail> PurchaseDetails = listPurchase.SelectMany(x => x.Datas).ToList();
                     if (!(dtLastImport is null))
                     {
-             
+
                         var idList = dtLastImport.AsEnumerable().Select(rows => rows[0]).ToList();
                         PurchaseDetails.RemoveAll(x => idList.Contains(x.Id));
 
@@ -219,10 +231,10 @@ namespace GetInvoice.Gmail
             {
                 return reponseMessage;
             }
-          
+
 
         }
-        public async Task<HDDTPurchase> GetHDDT(string state = null)
+        public async Task<HDDTPurchase> GetHDDT(string state = null, int ttxly = 5)
         {
             string token = frmMain._HDDTRequest.Token;
             var handler = new HttpClientHandler();
@@ -245,11 +257,11 @@ namespace GetInvoice.Gmail
 
                 if (string.IsNullOrEmpty(state))
                 {
-                    param = $"sort=tdlap:desc,khmshdon:asc,shdon:desc&size=50&search=tdlap=ge={formDate};tdlap=le={toDate};ttxly==5";
+                    param = $"sort=tdlap:desc,khmshdon:asc,shdon:desc&size=50&search=tdlap=ge={formDate};tdlap=le={toDate};ttxly=={ttxly}";
                 }
                 else
                 {
-                    param = $"sort=tdlap:desc,khmshdon:asc,shdon:desc&size=50&state={state}&search=tdlap=ge={formDate};tdlap=le={toDate};ttxly==5";
+                    param = $"sort=tdlap:desc,khmshdon:asc,shdon:desc&size=50&state={state}&search=tdlap=ge={formDate};tdlap=le={toDate};ttxly=={ttxly}";
                 }
                 var response = await httpClient.GetAsync(this.url + @"/query/invoices/purchase?" + param);
                 if (response.IsSuccessStatusCode)
@@ -291,7 +303,7 @@ namespace GetInvoice.Gmail
                     //var response = await httpClient.GetStreamAsync(@"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst=0109043428&khhdon=C23TMV&shdon=5&khmshdon=1");
 
 
-                    string savePath = Path.Combine(System.IO.Path.GetTempPath(), "invoice_"+purchaseDetail.Id+".zip");
+                    string savePath = Path.Combine(System.IO.Path.GetTempPath(), "invoice_" + purchaseDetail.Id + ".zip");
                     using (FileStream outputFileStream = File.Create(savePath))
                     {
                         await response.CopyToAsync(outputFileStream);
@@ -322,7 +334,7 @@ namespace GetInvoice.Gmail
                         Success = true
                     };
                 }
-                
+
             }
             catch (IOException ex)
             {
@@ -331,9 +343,9 @@ namespace GetInvoice.Gmail
             }
             catch (Exception ex)
             {
-                return new HDDTReponseMessage() { Success = false,Message =$"lỗi tải hóa đơn MST:{purchaseDetail.Nbmst} - HĐ số {purchaseDetail.Shdon}" +"\r\n" + ex.Message };
+                return new HDDTReponseMessage() { Success = false, Message = $"lỗi tải hóa đơn MST:{purchaseDetail.Nbmst} - HĐ số {purchaseDetail.Shdon}" + "\r\n" + ex.Message };
             }
-          
+
         }
     }
 }
