@@ -36,6 +36,10 @@ namespace GetInvoice.Gmail
             }
             _user = user;
         }
+        public string test()
+        {
+            return "tesst";
+        }
         public async Task<CaptChaModel> GetCaptChaAsync()
         {
             HttpClient getCaptcha = new HttpClient();
@@ -140,7 +144,7 @@ namespace GetInvoice.Gmail
             }
 
         }
-        public async Task<HDDTReponseMessage> Start()
+        public async Task<HDDTReponseMessage> Start(bool isAuto = false)
         {
             var listPurchase = new List<HDDTPurchase>();
             var reponseMessage = new HDDTReponseMessage();
@@ -178,7 +182,7 @@ namespace GetInvoice.Gmail
                 {
                     DataTable dtLastImport = utilities.ExeSQL($"select IdEmail, Domain " +
                         $" from f_LogGmail" +
-                        $" where Domain = 'HDDTGOV'" + $" AND created_by='{_user.ma_nd}' " +
+                        $" where Domain = 'HDDTGOV'" + $" AND created_by='{_user.ma_nd}'" + (isAuto ? "Success = 1 " : " 1 > 1 ") +
                         $" group by IdEmail,Domain");
 
                     DataTable dtImport = new DataTable();
@@ -186,6 +190,15 @@ namespace GetInvoice.Gmail
                     dtImport.Columns.Add("IdEmail", typeof(string));
                     dtImport.Columns.Add("Domain", typeof(string));
                     dtImport.Columns.Add("created_by", typeof(string));
+                    dtImport.Columns.Add("Mst_HD", typeof(string));
+                    dtImport.Columns.Add("SoHD", typeof(string));
+                    dtImport.Columns.Add("Success", typeof(int));
+                    dtImport.Columns.Add("CheckFile", typeof(int));
+                    dtImport.Columns.Add("Ngay_HD", typeof(DateTime));
+                    dtImport.Columns.Add("KHHD", typeof(string));
+
+
+
 
                     List<HDDTPurchaseDetail> PurchaseDetails = listPurchase.SelectMany(x => x.Datas).ToList();
                     if (!(dtLastImport is null))
@@ -199,14 +212,35 @@ namespace GetInvoice.Gmail
                     {
 
 
-                        var ok = await ExportXml(detail);
+                        DataRow dataRow = dtImport.NewRow();
+                        dataRow[0] = detail.Id;
+                        dataRow[1] = "HDDTGOV";
+                        dataRow[2] = _user.ma_nd;
+                        dataRow[3] = detail.Nbmst;
+                        dataRow[4] = detail.Shdon;
+                        dataRow[7] = detail.Tdlap;
+                        dataRow[8] = detail.Khhdon;
+
+                        var okXML = await ExportXml(detail);
+                        if (okXML.Success)
+                        {
+                            dataRow[5] = 1;
+                        }
+                        else
+                        {
+                            dataRow[5] = 0;
+                            reponseMessage.Messagesfailed.Add(okXML.Message);
+                        }
+
+                        var ok = await ExportJSON(detail);
                         if (ok.Success)
                         {
-                            DataRow dataRow = dtImport.NewRow();
-                            dataRow[0] = detail.Id;
-                            dataRow[1] = "HDDTGOV";
-                            dataRow[2] = _user.ma_nd;
-
+                            dataRow[6] = 1;
+                            dtImport.Rows.Add(dataRow);
+                        }
+                        else if (okXML.Success)
+                        {
+                            dataRow[6] = 1;
                             dtImport.Rows.Add(dataRow);
                         }
                         else
@@ -227,7 +261,7 @@ namespace GetInvoice.Gmail
                 }
                 return reponseMessage;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return reponseMessage;
             }
@@ -297,7 +331,7 @@ namespace GetInvoice.Gmail
 
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     var param = $"nbmst={purchaseDetail.Nbmst}&khhdon={purchaseDetail.Khhdon}&shdon={purchaseDetail.Shdon}&khmshdon={purchaseDetail.Khmshdon}";
-                    httpClient.Timeout = TimeSpan.FromSeconds(10);
+                    httpClient.Timeout = TimeSpan.FromSeconds(30);
                     var response = await httpClient.GetStreamAsync(this.url + @"/query/invoices/export-xml?" + param);
 
                     //var response = await httpClient.GetStreamAsync(@"https://hoadondientu.gdt.gov.vn:30000/query/invoices/export-xml?nbmst=0109043428&khhdon=C23TMV&shdon=5&khmshdon=1");
@@ -311,10 +345,36 @@ namespace GetInvoice.Gmail
 
                     string zipFilePath = savePath;
                     string extractPath = frmMain.local_user.path_load_file;
+                    string extracthtmlPath = setupGmail.PathPDF;
+                   
                     using (var archive = ArchiveFactory.Open(zipFilePath))
                     {
-                        foreach (var entry in archive.Entries.Where(entry => !entry.IsDirectory))
+                        foreach (var entry in archive.Entries)
                         {
+                            if (entry.Key.EndsWith(".html"))
+                            {
+                                string newFileName = purchaseDetail.Nbmst + "_" + purchaseDetail.Shdon + "_" + entry.Key;
+                                string destinationPath = Path.Combine(extracthtmlPath, newFileName);
+                                entry.WriteToFile(destinationPath, new ExtractionOptions()
+                                {
+                                    ExtractFullPath = true,
+                                    Overwrite = true
+                                });
+                            }
+                        }
+
+                        foreach (var entry in archive.Entries)
+                        {
+                            if (entry.Key.EndsWith(".html"))
+                            {
+                                string newFileName = purchaseDetail.Nbmst + "_" + purchaseDetail.Shdon + "_" + entry.Key;
+                                string destinationPath = Path.Combine(extracthtmlPath, newFileName);
+                                entry.WriteToFile(destinationPath, new ExtractionOptions()
+                                {
+                                    ExtractFullPath = true,
+                                    Overwrite = true
+                                });
+                            }
                             if (entry.Key.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
                             {
                                 string newFileName = purchaseDetail.Nbmst + "_" + purchaseDetail.Shdon + "_" + entry.Key;
@@ -347,5 +407,60 @@ namespace GetInvoice.Gmail
             }
 
         }
+
+
+        public async Task<HDDTReponseMessage> ExportJSON(HDDTPurchaseDetail purchaseDetail = null)
+        {
+            try
+            {
+                string token = frmMain._HDDTRequest.Token;
+                var handler = new HttpClientHandler();
+                var cookieContainer = new CookieContainer();
+                handler.CookieContainer = cookieContainer;
+                using (var httpClient = new HttpClient(handler))
+                {
+                    foreach (var item in frmMain._HDDTRequest.Cookie)
+                    {
+                        var cookie = new Cookie(item.Key, item.Value);
+                        cookieContainer.Add(new Uri(url), cookie);
+                        break;
+                    }
+
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    var param = $"/query/invoices/detail?nbmst={purchaseDetail.Nbmst}&khhdon={purchaseDetail.Khhdon}&shdon={purchaseDetail.Shdon}&khmshdon={purchaseDetail.Khmshdon}";
+                    httpClient.Timeout = TimeSpan.FromSeconds(10);
+                    var ssss = url + param;
+                    var response = await httpClient.GetAsync(url + param);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Request was successful
+                        var responseBody = await response.Content.ReadAsStringAsync();
+                        string newFileName = purchaseDetail.Nbmst + "_" + purchaseDetail.Shdon + "_invoice.json";
+                        string destinationPath = Path.Combine(frmMain.local_user.path_load_file, newFileName);
+                        File.WriteAllText(destinationPath, responseBody);
+                    }
+
+                    //var response = await httpClient.GetStreamAsync(@"https://hoadondientu.gdt.gov.vn:30000/query/invoices/detail?nbmst=5700101690-002&khhdon=K23TYL&shdon=353431&khmshdon=1");
+
+
+                    return new HDDTReponseMessage()
+                    {
+                        Success = true
+                    };
+                }
+
+            }
+            catch (IOException ex)
+            {
+
+                return new HDDTReponseMessage() { Success = false, Message = $"lỗi tải hóa đơn MST:{purchaseDetail.Nbmst} - HĐ số {purchaseDetail.Shdon}" + "\r\n" + ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new HDDTReponseMessage() { Success = false, Message = $"lỗi tải hóa đơn MST:{purchaseDetail.Nbmst} - HĐ số {purchaseDetail.Shdon}" + "\r\n" + ex.Message };
+            }
+
+        }
+
     }
 }

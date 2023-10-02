@@ -440,6 +440,7 @@
             this.Controls.Add(this.pn_Timer);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmGmail";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cổng nhận HDDT Online";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmGmail_FormClosing);
             this.Load += new System.EventHandler(this.frmGmail_Load);

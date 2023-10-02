@@ -54,7 +54,7 @@ namespace GetInvoice
             this.panelControl1.Controls.Add(this.button1);
             this.panelControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelControl1.Location = new System.Drawing.Point(0, 658);
-            this.panelControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelControl1.Margin = new System.Windows.Forms.Padding(4);
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Size = new System.Drawing.Size(1213, 46);
             this.panelControl1.TabIndex = 0;
@@ -62,8 +62,8 @@ namespace GetInvoice
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(1097, 7);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Location = new System.Drawing.Point(2110, -47);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 0;
@@ -75,7 +75,7 @@ namespace GetInvoice
             this.groupControl2.Controls.Add(this.gridMappingCols);
             this.groupControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupControl2.Location = new System.Drawing.Point(0, 0);
-            this.groupControl2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupControl2.Margin = new System.Windows.Forms.Padding(4);
             this.groupControl2.Name = "groupControl2";
             this.groupControl2.Size = new System.Drawing.Size(1213, 658);
             this.groupControl2.TabIndex = 4;
@@ -90,7 +90,7 @@ namespace GetInvoice
             this.gridMappingCols.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(4);
             this.gridMappingCols.Location = new System.Drawing.Point(2, 28);
             this.gridMappingCols.MainView = this.grvMappingCols;
-            this.gridMappingCols.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gridMappingCols.Margin = new System.Windows.Forms.Padding(4);
             this.gridMappingCols.Name = "gridMappingCols";
             this.gridMappingCols.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryXML_Column});
@@ -186,7 +186,7 @@ namespace GetInvoice
             this.ClientSize = new System.Drawing.Size(1213, 704);
             this.Controls.Add(this.groupControl2);
             this.Controls.Add(this.panelControl1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmMappingColumn";
             this.Text = "Khai báo dữ liệu bảng Map XML";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

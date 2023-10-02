@@ -51,6 +51,7 @@ namespace GetInvoice.Model
         public string Khmshdon { get; set; }
         public string Shdon { get; set; }
         public string shthdon { get; set; }
+        public DateTime Tdlap { get; set; }
 
 
     }

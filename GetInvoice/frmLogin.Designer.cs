@@ -41,6 +41,7 @@ namespace GetInvoice
             this.img_Captcha = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txt_captcha_GOV = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.cboConnections.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.img_Captcha)).BeginInit();
             this.SuspendLayout();
@@ -149,11 +150,24 @@ namespace GetInvoice
             this.txt_captcha_GOV.Size = new System.Drawing.Size(254, 24);
             this.txt_captcha_GOV.TabIndex = 10;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label5.Font = new System.Drawing.Font("Trebuchet MS", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(2, 214);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(76, 20);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "2023.09.19";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
+            // 
             // frmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(383, 238);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.txt_captcha_GOV);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.img_Captcha);
@@ -166,7 +180,6 @@ namespace GetInvoice
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnLogin);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -193,5 +206,6 @@ namespace GetInvoice
         private System.Windows.Forms.PictureBox img_Captcha;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txt_captcha_GOV;
+        private System.Windows.Forms.Label label5;
     }
 }

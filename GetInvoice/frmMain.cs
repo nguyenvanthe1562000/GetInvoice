@@ -85,17 +85,15 @@ namespace GetInvoice
 
                 while (!string.IsNullOrEmpty(local_user.domain) || !string.IsNullOrEmpty(_HDDTRequest.Token))
                 {
-                    if (!CheckSetUpUserVerify())
+
+                    if (CheckSetUpUserVerify())
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        // Run your task here
                         await AutoReadGmail();
                     }
-                    // Delay for the specified sleep duration
+
                     await Task.Delay(TimeSpan.FromMinutes(Program.setupGmail.Timer));
+                    // Delay for the specified sleep duration
+
                 }
             }
             catch (Exception ex)
@@ -144,7 +142,7 @@ namespace GetInvoice
                     if (_HDDTRequest.Token != null)
                     {
                         HDDT_GOV gov = new HDDT_GOV(local_user);
-                        Gov = await gov.Start();
+                        Gov = await gov.Start(true);
                     }
                 }
             }
@@ -201,7 +199,7 @@ namespace GetInvoice
         {
             try
             {
-                
+
                 bool _is_exists_file = true;
                 //string _upload_path = System.Configuration.ConfigurationManager.AppSettings["Upload_Path"];
                 string _upload_path = local_user.path_load_file;
@@ -213,7 +211,23 @@ namespace GetInvoice
                 }
                 DirectoryInfo d = new DirectoryInfo(_upload_path);
 
-                FileInfo[] Files = d.GetFiles("*.xml"); //Getting Text files
+                var Files = d.GetFiles("*.xml").ToList(); //Getting Text files
+                Files.AddRange(d.GetFiles("*.json").ToList()); //Getting Text files
+
+                var XmlJsonIsExist = Files
+                                     .Where(file => file.Extension == ".xml" && Files.Any(f => f.Name == Path.GetFileNameWithoutExtension(file.Name) + ".json")).ToList();
+
+                foreach (var file in XmlJsonIsExist)
+                {
+                    File.Delete(string.Format(@"{0}/{1}", _upload_path, file.Name));
+                }
+
+                Files.RemoveAll(file =>
+                  {
+                      string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
+                      return file.Extension == ".xml" && Files.Any(f => f.Name == fileNameWithoutExtension + ".json");
+                  });
+
                 string _msg = "";
                 int hdSuccess = 0;
                 //Xu ly last imported
@@ -227,11 +241,19 @@ namespace GetInvoice
                     }
                     else
                     {
-                        _msg = InsertDBWithFileName(string.Format(@"{0}/{1}", _upload_path, file.Name));
+                        if (file.Extension == ".xml")
+                        {
+                            _msg = InsertDBWithXML(string.Format(@"{0}/{1}", _upload_path, file.Name));
+                        }
+                        else
+                        {
+                            _msg = InsertDBWithJSON(string.Format(@"{0}/{1}", _upload_path, file.Name));
+                        }
+
                         _is_exists_file = false;
                         if (_msg != "ok")
                         {
-                            var failed = System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_FAILED\"+file.Name;
+                            var failed = System.IO.Directory.GetParent(_upload_path).FullName + @"\IMPORTED_FAILED\" + file.Name;
                             _Message.Add(file.Name + Environment.NewLine + "Lỗi: " + _msg + Environment.NewLine);
                             if (File.Exists(failed))
                             { File.Delete(failed); }
@@ -247,7 +269,7 @@ namespace GetInvoice
                         }
                     }
                 }
-                Message_Box("Các file xml trong thư mục đã được đồng bộ hết: " + $"{hdSuccess}/{Files.Length}");
+                Message_Box("Các file xml trong thư mục đã được đồng bộ hết: " + $"{hdSuccess}/{Files.Count}");
                 Load_LastImport(USERNAME);
             }
             catch (Exception ex)
@@ -266,8 +288,8 @@ namespace GetInvoice
             frm.ShowDialog();
         }
 
-        #region InsertDBWithFileName
-        private string InsertDBWithFileName(string xmlFile)
+        #region InsertDBWithXML
+        private string InsertDBWithXML(string xmlFile)
         {
             try
             {
@@ -312,6 +334,176 @@ namespace GetInvoice
                     dtHoaDon_CT.Rows.Add(drHDCT);
                 }
 
+
+                string _list_cols = "";
+                string _list_cols_var = "";
+                string _sqlInsert = "";
+
+                using (var new_conn = new SqlConnection(ConfigurationManager.ConnectionStrings[_NAME_CONNECTION_STRING].ToString()))
+                {
+                    if (new_conn.State != ConnectionState.Open)
+                        new_conn.Open();
+
+                    SqlCommand cmdInsert = new_conn.CreateCommand();
+                    foreach (DataColumn dc in dtHoaDon.Columns)
+                    {
+                        if (dtHoaDon.Rows[0][dc].ToString() != "")
+                        {
+                            _list_cols += dc.ColumnName + ", ";
+                            _list_cols_var += "@" + dc.ColumnName + ", ";
+                            if (dc.DataType.Name == "DateTime")
+                            {
+                                SqlParameter parameter = cmdInsert.Parameters.Add("@" + dc.ColumnName, System.Data.SqlDbType.DateTime);
+                                parameter.Value = dtHoaDon.Rows[0][dc];
+                            }
+                            else
+                            {
+                                cmdInsert.Parameters.AddWithValue("@" + dc.ColumnName, dtHoaDon.Rows[0][dc].ToString());
+                            }
+                        }
+                    }
+                    _list_cols = _list_cols.Remove(_list_cols.Length - 2);
+                    _list_cols_var = _list_cols_var.Remove(_list_cols_var.Length - 2);
+                    _sqlInsert = string.Format("INSERT INTO f_hoadon ({0}) VALUES({1}) SELECT SCOPE_IDENTITY() ", _list_cols, _list_cols_var);
+                    cmdInsert.CommandText = string.Format(_sqlInsert);
+                    cmdInsert.CommandType = CommandType.Text;
+                    string outParentId = cmdInsert.ExecuteScalar().ToString();
+
+                    using (var adapterCT = new SqlDataAdapter("SELECT * FROM f_hoadon_chitiet", new_conn))
+                    using (var builderCT = new SqlCommandBuilder(adapterCT))
+                    {
+                        foreach (DataRow iDr in dtHoaDon_CT.Rows)
+                        {
+                            iDr["parent_id"] = outParentId;
+                        }
+                        adapterCT.InsertCommand = builderCT.GetInsertCommand();
+                        adapterCT.Update(dtHoaDon_CT);
+                    }
+
+                    //Insert into database destination
+                    string conn_string_dest = string.Format(@"Data Source={0};Initial Catalog={1};User ID={2};Password={3}", _DATASOURCE_STRING_DEST, _DATABASE_NAME_DEST, _USERID_DEST, _PASSWORD_DEST);
+                    using (var conn_dest = new SqlConnection(conn_string_dest))
+                    {
+                        if (conn_dest.State != ConnectionState.Open)
+                            conn_dest.Open();
+
+                        cmdInsert.Connection = conn_dest;
+                        string outParentId_dest = cmdInsert.ExecuteScalar().ToString();
+
+                        var sqlQuery = "select * from f_hoadon_chitiet where 0 = 1";
+                        var dataAdapter = new SqlDataAdapter(sqlQuery, conn_dest);
+                        var ds = new DataSet();
+                        dataAdapter.Fill(ds);
+
+
+                        foreach (DataRow iDr in dtHoaDon_CT.Rows)
+                        {
+                            var desRow = ds.Tables[0].NewRow();
+                            desRow.ItemArray = iDr.ItemArray.Clone() as object[];
+                            desRow["parent_id"] = outParentId_dest;
+                            ds.Tables[0].Rows.Add(desRow);
+                        }
+
+                        new SqlCommandBuilder(dataAdapter);
+                        dataAdapter.Update(ds);
+
+                        //EXEC_PROCEDURE
+                        EXEC_PROCEDURE(conn_dest, "sp_execute_after_sync", DateTime.Now.ToString("yyyy-MM-dd"));
+
+
+                        _res = "ok";
+                    }
+                }
+
+                return _res;
+            }
+            catch (Exception ex)
+            {
+
+
+
+                if (ex.Message.Contains("Cannot insert duplicate key in object 'dbo.f_hoadon'"))
+                {
+                    return $"Hóa đơn tồn tại trong cơ sở dữ liệu\n{ex.Message}";
+
+                }
+                else
+                {
+                    return $"{ex.Message}";
+                    _logger.Log(LogType.Error, ex.Message, new StackTrace(ex, true).GetFrames().Last());
+                }
+                return "";
+            }
+        }
+        #endregion
+
+        #region InsertDBWithJSON
+        private string InsertDBWithJSON(string jsonFile)
+        {
+            try
+            {
+                string _res = "";
+                var jsonSting = File.ReadAllText(jsonFile);
+                JObject jsonObject = JObject.Parse(jsonSting);
+                //Hoa don
+                DataTable dtMapping_HoaDon = ExeSQL("select * from m_mapping_columns where db_column_name is not null and db_table_name = 'f_hoadon' AND type_data='JSON'");
+                DataTable dtHoaDon = ExeSQL("select top 0 * from f_hoadon");
+                DataRow dr = dtHoaDon.NewRow();
+
+                foreach (DataRow row in dtMapping_HoaDon.Rows)
+                {
+
+                    if (row["db_column_name"] != null && row["xml_name"] != null)
+                        if (!string.IsNullOrEmpty((string)jsonObject[row["xml_name"].ToString()]))
+                        {
+
+                            if (row["xml_name"].ToString() == "tdlap")
+                            {
+                                DateTime dateTime = DateTime.Parse(jsonObject[row["xml_name"].ToString()].ToString());
+                                var nlap = dateTime.AddHours(7);
+                                dr[row["db_column_name"].ToString()] = nlap.ToString();
+                            }
+                            else
+                            {
+                                dr[row["db_column_name"].ToString()] = jsonObject[row["xml_name"].ToString()].ToString();
+                            }
+                        }
+                }
+                dr["created_by"] = local_user.ma_nd;
+                dtHoaDon.Rows.Add(dr);
+
+                //DataTable dtHoaDon = DataTableFromXmlFile(xmlFile);
+
+                //Chi tiet hoa don
+                DataTable keyParent_CT = ExeSQL("select * from m_mapping_columns where db_column_name is not null and db_table_name = 'f_hoadon_chitiet' AND type_data = 'JSON' AND Parent = '' AND type_value = 'Array' ");
+                DataTable dtMapping_HoaDon_CT = ExeSQL("select * from m_mapping_columns where db_column_name is not null and db_table_name = 'f_hoadon_chitiet' AND type_data = 'JSON' AND parent <> '' ");
+
+                DataTable dtHoaDon_CT = ExeSQL("select top 0 * from f_hoadon_chitiet");
+
+                string _hdct_path = "";
+                _hdct_path = dtMapping_HoaDon_CT.Rows[0]["xml_path"].ToString().Split('|')[0];
+                foreach (DataRow row in keyParent_CT.Rows)
+                {
+
+                    JArray hdhhdvuArray = (JArray)jsonObject[row["xml_name"].ToString()];
+                    foreach (var hdhhdvuObject in hdhhdvuArray)
+                    {
+                        DataRow drHDCT = dtHoaDon_CT.NewRow();
+                        foreach (DataRow rowCT in dtMapping_HoaDon_CT.Rows)
+                        {
+                            if (rowCT["parent"].ToString() == row["xml_name"].ToString())
+                            {
+                                if (!string.IsNullOrEmpty((string)hdhhdvuObject[rowCT["xml_name"].ToString()]))
+                                {
+                                    drHDCT[rowCT["db_column_name"].ToString()] = hdhhdvuObject[rowCT["xml_name"].ToString()].ToString();
+
+                                }
+                            }
+
+                        }
+                        dtHoaDon_CT.Rows.Add(drHDCT);
+                    }
+                }
 
                 string _list_cols = "";
                 string _list_cols_var = "";
@@ -620,14 +812,14 @@ namespace GetInvoice
             }
         }
 
-        private void tsbtnLayDuLieuImport_Click(object sender, EventArgs e)
+        private async void tsbtnLayDuLieuImport_Click(object sender, EventArgs e)
         {
             startProcess();
             Load_LastImport(USERNAME);
             endProcess();
         }
 
-        private void Load_LastImport(string _ma_nd)
+        private async Task Load_LastImport(string _ma_nd)
         {
             DataTable dtLastImport = ExeSQL(string.Format("select top 100 * from f_hoadon where last_imported = 1 and created_by = '{0}' order by id desc", _ma_nd));
 
@@ -794,6 +986,18 @@ namespace GetInvoice
         {
             timer1.Enabled = false;
             stopwatch.Stop();
+
+        }
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InsertDBWithJSON(@"D:\GET_INVOICE\GET_INVOICE_28072023\XML\0108254828_68.json");
+        }
+
+        private void tesst2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HDDT_GOV hDDT_GOV = new HDDT_GOV();
+            MessageBox.Show(hDDT_GOV.test());
 
         }
     }

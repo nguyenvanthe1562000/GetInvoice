@@ -22,7 +22,7 @@ namespace GetInvoice
 
         private void Load_Data()
         {
-            DataTable dt = ExeSQL("select * from m_mapping_columns order by db_column_name");
+            DataTable dt = ExeSQL("select * from m_mapping_columns order by type_data, db_table_name, db_column_name");
             gridMappingCols.DataSource = dt;
             grvMappingCols.BestFitColumns();
         }
